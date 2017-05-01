@@ -41,6 +41,11 @@ defmodule Sherbet.Service.Mixfile do
     #
     # Type "mix help deps" for more examples and options
     defp deps do
-        []
+        [
+            { :ecto, "~> 2.1" },
+            { :postgrex, "~> 0.13.2" },
+            { :protecto, github: "ScrimpyCat/Protecto" },
+            { :defecto, github: "ScrimpyCat/Defecto" }
+        ]
     end
 end
