@@ -50,6 +50,7 @@ defmodule Sherbet.Service.Mixfile do
         [
             { :ecto, "~> 2.1" },
             { :postgrex, "~> 0.13.2" },
+            { :gobstopper_api, github: "ScrimpyCat/gobstopper", sparse: "apps/gobstopper_api" },
             { :protecto, github: "ScrimpyCat/Protecto" },
             { :defecto, github: "ScrimpyCat/Defecto" }
         ]
