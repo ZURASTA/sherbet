@@ -1,7 +1,7 @@
 defmodule Sherbet.Service do
     @moduledoc false
 
-    use Application
+    use AHS
 
     def start(_type, _args) do
         import Supervisor.Spec, warn: false
