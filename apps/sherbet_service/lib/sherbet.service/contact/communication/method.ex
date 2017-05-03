@@ -61,9 +61,10 @@ defmodule Sherbet.Service.Contact.Communication.Method do
       Implement the behaviour for identifying if a communicaton method belonging to the given
       identity has been verified.
 
-      If it is verified return true, otherwise return false.
+      If the operation was successful return whether it was verified or not (true if it was
+      verified, otherwise false). Otherwise return an error.
     """
-    @callback verified?(identity :: Gobstopper.API.Auth.uuid, contact :: String.t) :: boolean
+    @callback verified?(identity :: Gobstopper.API.Auth.uuid, contact :: String.t) :: { :ok, verified :: boolean } | { :error, reason :: String.t }
 
     @doc """
       Implement the behaviour for requesting an unverified communication method be verified.
