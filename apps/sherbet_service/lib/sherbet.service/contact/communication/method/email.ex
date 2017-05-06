@@ -7,6 +7,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
 
     alias Sherbet.Service.Contact.Communication.Method
     require Logger
+    import Ecto.Query
 
     #todo: should error reasons expose changeset.errors?
 
@@ -104,7 +105,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
-    def finalise_verification(identity, contact, key) do
+    def finalise_verification(identity, email, key) do
         #todo: check key is associated with the given email
         query = from contact in Method.Email.Model,
             where: contact.email == ^email,
