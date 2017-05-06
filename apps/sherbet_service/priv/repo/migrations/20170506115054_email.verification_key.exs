@@ -3,10 +3,7 @@ defmodule Sherbet.Service.Repo.Migrations.Email.VerificationKey do
 
     def change do
         create table(:email_verification_keys) do
-            add :identity, :uuid,
-                null: false
-
-            add :email_id, references(:emails),
+            add :email_id, references(:emails, on_delete: :delete_all),
                 null: false
 
             add :key, :string,
