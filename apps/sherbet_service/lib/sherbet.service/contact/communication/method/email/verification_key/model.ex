@@ -19,7 +19,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email.VerificationKey.Mod
       Is the verification key needed to verify this entry. Is a `string`.
     """
 
-    schema "emails" do
+    schema "email_verification_keys" do
         belongs_to :email, Sherbet.Service.Contact.Communication.Method.Email.Model
         field :key, :string
         timestamps()
