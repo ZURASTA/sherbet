@@ -5,7 +5,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
 
     @behaviour Sherbet.Service.Contact.Communication.Method
 
-    alias Sherbet.Service.Contact.Communication.Method
+    alias Sherbet.Service.Contact.Communication.Method.Email
     require Logger
     import Ecto.Query
 
@@ -13,8 +13,8 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
 
     def add(identity, email) do
         contact =
-            %Method.Email.Model{}
-            |> Method.Email.Model.insert_changeset(%{ identity: identity, email: email })
+            %Email.Model{}
+            |> Email.Model.insert_changeset(%{ identity: identity, email: email })
             |> Sherbet.Service.Repo.insert
 
         case contact do
@@ -26,7 +26,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
     end
 
     def remove(identity, email) do
-        query = from contact in Method.Email.Model,
+        query = from contact in Email.Model,
             where: contact.identity == ^identity and contact.email == ^email
 
         case Sherbet.Service.Repo.delete_all(query) do
@@ -38,7 +38,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
     end
 
     def verified?(identity, email) do
-        query = from contact in Method.Email.Model,
+        query = from contact in Email.Model,
             where: contact.identity == ^identity and contact.email == ^email,
             select: contact.verified
 
@@ -49,7 +49,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
     end
 
     def contacts(identity) do
-        query = from contact in Method.Email.Model,
+        query = from contact in Email.Model,
             where: contact.identity == ^identity,
             select: { contact.verified, contact.email }
 
@@ -64,7 +64,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
     end
 
     def request_removal(email) do
-        query = from contact in Method.Email.Model,
+        query = from contact in Email.Model,
             where: contact.email == ^email,
             select: contact.verified
 
@@ -80,7 +80,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
 
     def finalise_removal(email, key) do
         #todo: check key is associated with the given email
-        query = from contact in Method.Email.Model,
+        query = from contact in Email.Model,
             where: contact.email == ^email and contact.verified == false
 
         case Sherbet.Service.Repo.delete_all(query) do
@@ -91,12 +91,12 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
     end
 
     def request_verification(identity, email) do
-        query = from contact in Method.Email.Model,
+        query = from contact in Email.Model,
             where: contact.email == ^email,
             select: { contact.id, contact.verified }
 
         with { :email, { id, false } } <- { :email, Sherbet.Service.Repo.one(query) },
-             { :key, { :ok, _ } } <- { :key, Sherbet.Service.Repo.insert(Method.Email.VerificationKey.Model.changeset(%Method.Email.VerificationKey.Model{}, %{ email_id: id, key: generate_key() })) } do
+             { :key, { :ok, _ } } <- { :key, Sherbet.Service.Repo.insert(Email.VerificationKey.Model.changeset(%Email.VerificationKey.Model{}, %{ email_id: id, key: generate_key() })) } do
                 #todo: send unique key to the email (use mailing service to send the message)
                 :ok
         else
@@ -110,7 +110,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
 
     def finalise_verification(identity, email, key) do
         #todo: check key is associated with the given email
-        query = from contact in Method.Email.Model,
+        query = from contact in Email.Model,
             where: contact.email == ^email,
             select: contact.verified
 
