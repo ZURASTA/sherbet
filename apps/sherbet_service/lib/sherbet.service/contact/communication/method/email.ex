@@ -66,15 +66,18 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
     def request_removal(email) do
         query = from contact in Email.Model,
             where: contact.email == ^email,
-            select: contact.verified
+            select: { contact.id, contact.verified }
 
-        case Sherbet.Service.Repo.one(query) do
-            nil -> { :error, "Email does not exist" }
-            true -> { :error, "Email is verified" }
-            false ->
-                #todo: generate and store unique key
+        with { :email, { id, false } } <- { :email, Sherbet.Service.Repo.one(query) },
+             { :key, { :ok, _ } } <- { :key, Sherbet.Service.Repo.insert(Email.RemovalKey.Model.changeset(%Email.RemovalKey.Model{}, %{ email_id: id, key: generate_key() })) } do
                 #todo: send unique key to the email (use mailing service to send the message)
                 :ok
+        else
+            { :email, nil } -> { :error, "Email does not exist" }
+            { :email, { _, true } } -> { :error, "Email is verified" }
+            { :key, { :error, changeset } } ->
+                Logger.debug("request_verification: #{inspect(changeset.errors)}")
+                { :error, "Failed to create removal key for email" }
         end
     end
 
