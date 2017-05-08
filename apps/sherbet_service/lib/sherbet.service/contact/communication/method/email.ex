@@ -92,7 +92,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
 
     def request_verification(identity, email) do
         query = from contact in Email.Model,
-            where: contact.email == ^email,
+            where: contact.email == ^email and contact.identity == ^identity,
             select: { contact.id, contact.verified }
 
         with { :email, { id, false } } <- { :email, Sherbet.Service.Repo.one(query) },
