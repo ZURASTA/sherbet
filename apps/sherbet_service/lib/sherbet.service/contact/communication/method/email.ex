@@ -109,16 +109,27 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
     end
 
     def finalise_verification(identity, email, key) do
-        #todo: check key is associated with the given email
-        query = from contact in Email.Model,
-            where: contact.email == ^email,
-            select: contact.verified
+        query = from verification in Email.VerificationKey.Model,
+            where: verification.key == ^key,
+            join: contact in Email.Model, on: contact.id == verification.email_id and contact.identity == ^identity and contact.email == ^email,
+            select: contact
 
         case Sherbet.Service.Repo.one(query) do
-            nil -> { :error, "Email does not exist" }
-            true -> { :error, "Email is verified" }
-            false ->
-                :ok
+            nil -> { :error, "Invalid verification attempt" }
+            %Email.Model{ verified: true } -> { :error, "Email is verified" }
+            contact = %Email.Model{ verified: false, id: id } ->
+                case Sherbet.Service.Repo.update(Email.Model.update_changeset(contact, %{ verified: true })) do
+                    { :ok, _ } ->
+                        query = from verification in Email.VerificationKey.Model,
+                            where: verification.email_id == ^id
+
+                        Sherbet.Service.Repo.delete_all(query)
+
+                        :ok
+                    { :error, changeset } ->
+                        Logger.debug("finalise_verification: #{inspect(changeset.errors)}")
+                        { :error, "Failed to verify email" }
+                end
         end
     end
 
