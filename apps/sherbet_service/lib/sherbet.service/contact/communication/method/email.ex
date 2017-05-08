@@ -82,14 +82,21 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
     end
 
     def finalise_removal(email, key) do
-        #todo: check key is associated with the given email
-        query = from contact in Email.Model,
-            where: contact.email == ^email and contact.verified == false
+        query = from removal in Email.RemovalKey.Model,
+            where: removal.key == ^key,
+            join: contact in Email.Model, on: contact.id == removal.email_id and contact.email == ^email,
+            select: contact
 
-        case Sherbet.Service.Repo.delete_all(query) do
-            { 0, _ } ->
-                { :error, "Failed to remove the contact" }
-            _ -> :ok
+        case Sherbet.Service.Repo.one(query) do
+            nil -> { :error, "Invalid removal attempt" }
+            %Email.Model{ verified: true } -> { :error, "Email is verified" }
+            contact = %Email.Model{ verified: false, id: id } ->
+                case Sherbet.Service.Repo.delete(contact) do
+                    { :ok, _ } -> :ok
+                    { :error, changeset } ->
+                        Logger.debug("finalise_removal: #{inspect(changeset.errors)}")
+                        { :error, "Failed to remove email" }
+                end
         end
     end
 
