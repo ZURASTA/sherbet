@@ -9,7 +9,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email.VerificationKey.Mod
       ##Fields
 
       ###:id
-      Is the unique reference to the email contact entry. Is an `integer`.
+      Is the unique reference to the verification key entry. Is an `integer`.
 
       ###:email_id
       Is the reference to the email the verification key belongs to. Is an
