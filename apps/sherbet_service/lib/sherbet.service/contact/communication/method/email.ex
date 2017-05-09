@@ -90,7 +90,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         case Sherbet.Service.Repo.one(query) do
             nil -> { :error, "Invalid removal attempt" }
             %Email.Model{ verified: true } -> { :error, "Email is verified" }
-            contact = %Email.Model{ verified: false, id: id } ->
+            contact = %Email.Model{ verified: false } ->
                 case Sherbet.Service.Repo.delete(contact) do
                     { :ok, _ } -> :ok
                     { :error, changeset } ->
