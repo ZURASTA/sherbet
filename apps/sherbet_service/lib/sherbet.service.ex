@@ -7,6 +7,7 @@ defmodule Sherbet.Service do
         import Supervisor.Spec, warn: false
 
         children = [
+            supervisor(Sherbet.Service.Repo, [])
         ]
 
         opts = [strategy: :one_for_one, name: Sherbet.Service.Supervisor]
