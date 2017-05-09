@@ -1,0 +1,42 @@
+defmodule Sherbet.Service.Contact.Communication.Method.Mobile.VerificationKey.Model do
+    use Ecto.Schema
+    import Ecto
+    import Ecto.Changeset
+    import Protecto
+    @moduledoc """
+      A model representing the different mobile verification keys.
+
+      ##Fields
+
+      ###:id
+      Is the unique reference to the verification key entry. Is an `integer`.
+
+      ###:mobile_id
+      Is the reference to the mobile the verification key belongs to. Is an
+      `integer` to `Sherbet.Service.Contact.Communication.Method.Mobile.Model`.
+
+      ###:key
+      Is the verification key needed to verify this entry. Is a `string`.
+    """
+
+    schema "mobile_verification_keys" do
+        belongs_to :mobile, Sherbet.Service.Contact.Communication.Method.Mobile.Model
+        field :key, :string
+        timestamps()
+    end
+
+    @doc """
+      Builds a changeset for the `struct` and `params`.
+
+      Enforces:
+      * `mobile_id` field is required
+      * `key` field is required
+      * `mobile_id` field is associated with an entry in `Sherbet.Service.Contact.Communication.Method.Mobile.Model`
+    """
+    def changeset(struct, params \\ %{}) do
+        struct
+        |> cast(params, [:mobile_id, :key])
+        |> validate_required([:mobile_id, :key])
+        |> assoc_constraint(:mobile)
+    end
+end
