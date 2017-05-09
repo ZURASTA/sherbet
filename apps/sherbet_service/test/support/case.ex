@@ -23,6 +23,8 @@ defmodule Sherbet.Service.Case do
             Ecto.Adapters.SQL.Sandbox.mode(Gobstopper.Service.Repo, { :shared, self() })
         end
 
+        :timer.sleep(100)
+
         :ok
     end
 end
