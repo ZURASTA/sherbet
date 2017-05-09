@@ -39,4 +39,12 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email.VerificationKey.Mod
         assert_change(%VerificationKey.Model{}, %{ email_id: verification.email_id, key: verification.key })
         |> assert_insert(:ok)
     end
+
+    test "deletion" do
+        email = Sherbet.Service.Repo.insert!(Sherbet.Service.Contact.Communication.Method.Email.Model.insert_changeset(%Sherbet.Service.Contact.Communication.Method.Email.Model{}, %{ identity: Ecto.UUID.generate(), email: "foo@bar" }))
+        verification = Sherbet.Service.Repo.insert!(VerificationKey.Model.changeset(%VerificationKey.Model{}, %{ email_id: email.id, key: "test" }))
+
+        Sherbet.Service.Repo.delete!(email)
+        assert nil == Sherbet.Service.Repo.get(VerificationKey.Model, verification.id)
+    end
 end

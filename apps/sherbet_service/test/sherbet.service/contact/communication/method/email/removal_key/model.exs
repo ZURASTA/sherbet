@@ -39,4 +39,12 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email.RemovalKey.ModelTes
         assert_change(%RemovalKey.Model{}, %{ email_id: removal.email_id, key: removal.key })
         |> assert_insert(:ok)
     end
+
+    test "deletion" do
+        email = Sherbet.Service.Repo.insert!(Sherbet.Service.Contact.Communication.Method.Email.Model.insert_changeset(%Sherbet.Service.Contact.Communication.Method.Email.Model{}, %{ identity: Ecto.UUID.generate(), email: "foo@bar" }))
+        removal = Sherbet.Service.Repo.insert!(RemovalKey.Model.changeset(%RemovalKey.Model{}, %{ email_id: email.id, key: "test" }))
+
+        Sherbet.Service.Repo.delete!(email)
+        assert nil == Sherbet.Service.Repo.get(RemovalKey.Model, removal.id)
+    end
 end
