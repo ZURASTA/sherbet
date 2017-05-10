@@ -26,7 +26,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       If the operation was successful return `:ok`.
     """
-    @callback add(identity :: Gobstopper.API.Auth.uuid, contact :: String.t) :: :ok | { :error, reason :: String.t }
+    @callback add(identity :: Auth.uuid, contact :: String.t) :: :ok | { :error, reason :: String.t }
 
     @doc """
       Implement the behaviour for removing a communication method associated with the
@@ -34,7 +34,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       If the operation was successful return `:ok`. Otherwise return the error.
     """
-    @callback remove(identity :: Gobstopper.API.Auth.uuid, contact :: String.t) :: :ok | { :error, reason :: String.t }
+    @callback remove(identity :: Auth.uuid, contact :: String.t) :: :ok | { :error, reason :: String.t }
 
     @doc """
       Implement the behaviour for requesting an unverified communication method be removed.
@@ -64,7 +64,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
       If the operation was successful return whether it was verified or not (true if it was
       verified, otherwise false). Otherwise return an error.
     """
-    @callback verified?(identity :: Gobstopper.API.Auth.uuid, contact :: String.t) :: { :ok, verified :: boolean } | { :error, reason :: String.t }
+    @callback verified?(identity :: Auth.uuid, contact :: String.t) :: { :ok, verified :: boolean } | { :error, reason :: String.t }
 
     @doc """
       Implement the behaviour for requesting an unverified communication method be verified.
@@ -75,7 +75,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       If the operation was successful return `:ok`. Otherwise return an error.
     """
-    @callback request_verification(identity :: Gobstopper.API.Auth.uuid, contact :: String.t) :: :ok | { :error, reason :: String.t }
+    @callback request_verification(identity :: Auth.uuid, contact :: String.t) :: :ok | { :error, reason :: String.t }
 
     @doc """
       Implement the behaviour for finalising a verification request of an unverified
@@ -85,7 +85,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       If the operation was successful return `:ok`. Otherwise return an error.
     """
-    @callback finalise_verification(identity :: Gobstopper.API.Auth.uuid, contact :: String.t, key :: String.t) :: :ok | { :error, reason :: String.t }
+    @callback finalise_verification(identity :: Auth.uuid, contact :: String.t, key :: String.t) :: :ok | { :error, reason :: String.t }
 
     @doc """
       Implement the behaviour for retrieving the contacts of the communication method for
@@ -95,7 +95,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
       the list of communication methods associated with the given identity and their
       current verification status. Otherwise return an error.
     """
-    @callback contacts(identity :: Gobstopper.API.Auth.uuid) :: { :ok, contacts :: [{ :unverified | :verified, String.t }] } | { :error, reason :: String.t }
+    @callback contacts(identity :: Auth.uuid) :: { :ok, contacts :: [{ :unverified | :verified, String.t }] } | { :error, reason :: String.t }
 
     @doc """
       Associate a new contact with the given identity.
@@ -104,7 +104,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       If the operation was successful return `:ok`.
     """
-    @spec add(atom, Gobstopper.API.Auth.uuid, String.t) :: :ok | { :error, String.t }
+    @spec add(atom, Auth.uuid, String.t) :: :ok | { :error, String.t }
     def add(type, identity, contact) do
         atom_to_module(type).add(identity, contact)
     end
@@ -114,7 +114,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       Returns `:ok` if the operation was successful, otherwise returns an error.
     """
-    @spec remove(atom, Gobstopper.API.Auth.uuid, String.t) :: :ok | { :error, String.t }
+    @spec remove(atom, Auth.uuid, String.t) :: :ok | { :error, String.t }
     def remove(type, identity, contact) do
         atom_to_module(type).remove(identity, contact)
     end
@@ -148,7 +148,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       Returns true if it is verified, otherwise false.
     """
-    @spec verified?(atom, Gobstopper.API.Auth.uuid, String.t) :: boolean
+    @spec verified?(atom, Auth.uuid, String.t) :: boolean
     def verified?(type, identity, contact) do
         atom_to_module(type).verified?(identity, contact)
     end
@@ -160,7 +160,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
     If the operation was successful return `:ok`.
     """
-    @spec request_verification(atom, Gobstopper.API.Auth.uuid, String.t) :: :ok | { :error, String.t }
+    @spec request_verification(atom, Auth.uuid, String.t) :: :ok | { :error, String.t }
     def request_verification(type, identity, contact) do
         atom_to_module(type).request_verification(identity, contact)
     end
@@ -172,7 +172,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       If the operation was successful return `:ok`.
     """
-    @spec finalise_verification(atom, Gobstopper.API.Auth.uuid, String.t, String.t) :: :ok | { :error, String.t }
+    @spec finalise_verification(atom, Auth.uuid, String.t, String.t) :: :ok | { :error, String.t }
     def finalise_verification(type, identity, contact, key) do
         atom_to_module(type).finalise_verification(identity, contact, key)
     end
@@ -184,7 +184,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
       the list of communication methods associated with the given identity and their
       current verification status. Otherwise returns the reason of failure.
     """
-    @spec contacts(atom, Gobstopper.API.Auth.uuid) :: { :ok, [{ :unverified | :verified, String.t }] } | { :error, String.t }
+    @spec contacts(atom, Auth.uuid) :: { :ok, [{ :unverified | :verified, String.t }] } | { :error, String.t }
     def contacts(type, identity) do
         atom_to_module(type).contacts(identity)
     end
