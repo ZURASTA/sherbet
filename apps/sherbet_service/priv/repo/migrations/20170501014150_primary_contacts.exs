@@ -6,11 +6,9 @@ defmodule Sherbet.Service.Repo.Migrations.PrimaryContacts do
             add :identity, :uuid,
                 null: false
 
-            add :email_id, references(:emails),
-                null: false
+            add :email_id, references(:emails)
 
-            add :mobile_id, references(:mobiles),
-                null: false
+            add :mobile_id, references(:mobiles)
 
             timestamps()
         end
