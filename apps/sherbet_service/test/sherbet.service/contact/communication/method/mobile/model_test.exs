@@ -6,7 +6,8 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile.ModelTest do
     @valid_model %Mobile.Model{
         identity: Ecto.UUID.generate(),
         mobile: "+123",
-        verified: true
+        verified: true,
+        primary: false
     }
 
     test "empty" do
@@ -31,6 +32,12 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile.ModelTest do
         assert_change(@valid_model, %{ verified: false }, :update_changeset)
     end
 
+    test "only primary" do
+        refute_change(%Mobile.Model{}, %{ primary: @valid_model.primary }, :insert_changeset)
+
+        assert_change(@valid_model, %{ primary: false }, :update_changeset)
+    end
+
     test "without identity" do
         refute_change(@valid_model, %{ identity: nil }, :insert_changeset)
     end
@@ -41,6 +48,10 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile.ModelTest do
 
     test "without verified" do
         assert_change(@valid_model, %{ verified: nil }, :insert_changeset)
+    end
+
+    test "without primary" do
+        assert_change(@valid_model, %{ primary: nil }, :insert_changeset)
     end
 
     test "valid model" do
@@ -86,6 +97,20 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile.ModelTest do
         |> assert_insert(:ok)
 
         assert_change(@valid_model, %{ identity: @valid_model.identity, mobile: "+200" }, :insert_changeset)
+        |> assert_insert(:ok)
+    end
+
+    test "primary uniqueness" do
+        mobile = Sherbet.Service.Repo.insert!(Mobile.Model.insert_changeset(@valid_model, %{ primary: true }))
+
+        assert_change(@valid_model, %{ identity:  @valid_model.identity, mobile: "+100", primary: true }, :insert_changeset)
+        |> assert_insert(:error)
+        |> assert_error_value(:primary_contact, { "has already been taken", [] })
+
+        assert_change(@valid_model, %{ identity: Ecto.UUID.generate(), mobile: "+100", primary: true }, :insert_changeset)
+        |> assert_insert(:ok)
+
+        assert_change(@valid_model, %{ identity: @valid_model.identity, mobile: "+200", primary: false }, :insert_changeset)
         |> assert_insert(:ok)
     end
 end

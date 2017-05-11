@@ -6,7 +6,8 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email.ModelTest do
     @valid_model %Email.Model{
         identity: Ecto.UUID.generate(),
         email: "foo@test",
-        verified: true
+        verified: true,
+        primary: false
     }
 
     test "empty" do
@@ -31,6 +32,12 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email.ModelTest do
         assert_change(@valid_model, %{ verified: false }, :update_changeset)
     end
 
+    test "only primary" do
+        refute_change(%Email.Model{}, %{ primary: @valid_model.primary }, :insert_changeset)
+
+        assert_change(@valid_model, %{ primary: false }, :update_changeset)
+    end
+
     test "without identity" do
         refute_change(@valid_model, %{ identity: nil }, :insert_changeset)
     end
@@ -41,6 +48,10 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email.ModelTest do
 
     test "without verified" do
         assert_change(@valid_model, %{ verified: nil }, :insert_changeset)
+    end
+
+    test "without primary" do
+        assert_change(@valid_model, %{ primary: nil }, :insert_changeset)
     end
 
     test "valid model" do
@@ -80,6 +91,20 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email.ModelTest do
         |> assert_insert(:ok)
 
         assert_change(@valid_model, %{ identity: @valid_model.identity, email: "foo@foo" }, :insert_changeset)
+        |> assert_insert(:ok)
+    end
+
+    test "primary uniqueness" do
+        email = Sherbet.Service.Repo.insert!(Email.Model.insert_changeset(@valid_model, %{ primary: true }))
+
+        assert_change(@valid_model, %{ identity:  @valid_model.identity, email: "foo@bar", primary: true }, :insert_changeset)
+        |> assert_insert(:error)
+        |> assert_error_value(:primary_contact, { "has already been taken", [] })
+
+        assert_change(@valid_model, %{ identity: Ecto.UUID.generate(), email: "foo@bar", primary: true }, :insert_changeset)
+        |> assert_insert(:ok)
+
+        assert_change(@valid_model, %{ identity: @valid_model.identity, email: "foo@foo", primary: false }, :insert_changeset)
         |> assert_insert(:ok)
     end
 end
