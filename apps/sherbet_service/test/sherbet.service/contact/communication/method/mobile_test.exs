@@ -213,4 +213,27 @@ defmodule Sherbet.Service.Contact.Communication.Method.MobileTest do
 
         assert { :error, "Mobile does not exist" } == Mobile.request_verification(identity, "+999")
     end
+
+    test "setting mobile priority" do
+        { :ok, token } = Gobstopper.API.Auth.Email.register("foo@bar", "secret")
+        identity = Gobstopper.API.Auth.verify(token)
+
+        assert :ok == Mobile.add(identity, "+100")
+        assert :ok == Mobile.make_primary(identity, "+100")
+        assert { :ok, { :unverified, "+100" } } == Mobile.primary_contact(identity)
+
+        assert :ok == Mobile.add(identity, "+1002")
+        assert { :ok, { :unverified, "+100" } } == Mobile.primary_contact(identity)
+        assert :ok == Mobile.make_primary(identity, "+1002")
+        assert { :ok, { :unverified, "+1002" } } == Mobile.primary_contact(identity)
+
+        assert { :error, "Mobile does not exist" } == Mobile.make_primary(identity, "fake@foo")
+        assert { :ok, { :unverified, "+1002" } } == Mobile.primary_contact(identity)
+
+        { :ok, token } = Gobstopper.API.Auth.Email.register("foo2@bar", "secret")
+        identity2 = Gobstopper.API.Auth.verify(token)
+
+        assert { :error, "Mobile does not exist" } == Mobile.make_primary(identity2, "+100")
+        assert { :ok, { :unverified, "+1002" } } == Mobile.primary_contact(identity)
+    end
 end

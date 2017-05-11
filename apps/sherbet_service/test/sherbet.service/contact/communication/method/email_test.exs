@@ -8,7 +8,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.EmailTest do
         identity = Gobstopper.API.Auth.verify(token)
 
         # { :ok, contacts } = Email.contacts(identity)
-        # assert contacts == [{ :unverified, "foo@bar" }]
+        # assert contacts == [{ :unverified, :primary, "foo@bar" }]
 
         assert :ok == Email.add(identity, "foo@foo")
 
@@ -212,5 +212,28 @@ defmodule Sherbet.Service.Contact.Communication.Method.EmailTest do
         :ok = Email.add(identity, "foo@foo")
 
         assert { :error, "Email does not exist" } == Email.request_verification(identity, "fake@foo")
+    end
+
+    test "setting email priority" do
+        { :ok, token } = Gobstopper.API.Auth.Email.register("foo@bar", "secret")
+        identity = Gobstopper.API.Auth.verify(token)
+
+        assert :ok == Email.add(identity, "foo@foo")
+        assert :ok == Email.make_primary(identity, "foo@foo")
+        assert { :ok, { :unverified, "foo@foo" } } == Email.primary_contact(identity)
+
+        assert :ok == Email.add(identity, "foo@foo2")
+        assert { :ok, { :unverified, "foo@foo" } } == Email.primary_contact(identity)
+        assert :ok == Email.make_primary(identity, "foo@foo2")
+        assert { :ok, { :unverified, "foo@foo2" } } == Email.primary_contact(identity)
+
+        assert { :error, "Email does not exist" } == Email.make_primary(identity, "fake@foo")
+        assert { :ok, { :unverified, "foo@foo2" } } == Email.primary_contact(identity)
+
+        { :ok, token } = Gobstopper.API.Auth.Email.register("foo2@bar", "secret")
+        identity2 = Gobstopper.API.Auth.verify(token)
+
+        assert { :error, "Email does not exist" } == Email.make_primary(identity2, "foo@foo")
+        assert { :ok, { :unverified, "foo@foo2" } } == Email.primary_contact(identity)
     end
 end
