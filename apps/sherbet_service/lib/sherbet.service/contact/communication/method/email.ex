@@ -37,6 +37,29 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
+    def make_primary(identity, email) do
+        query = from contact in Email.Model,
+            where: contact.identity == ^identity and contact.primary == true
+
+        transaction = case Sherbet.Service.Repo.one(query) do
+            nil -> Ecto.Multi.new
+            email ->
+                Ecto.Multi.new
+                |> Ecto.Multi.update(:make_secondary, Email.Model.update_changeset(email, %{ primary: false }))
+        end
+
+        query = from contact in Email.Model,
+            where: contact.identity == ^identity and contact.email == ^email
+
+        with { :email, email = %Email.Model{} } <- { :email, Sherbet.Service.Repo.one(query) },
+             { :update, { :ok, _ } } <- { :update, Sherbet.Service.Repo.transaction(Ecto.Multi.update(transaction, :make_primary, Email.Model.update_changeset(email, %{ primary: true }))) } do
+                :ok
+        else
+            { :email, _ } -> { :error, "Email does not exist" }
+            { :update, _ } -> { :error, "Failed to make email primary" }
+        end
+    end
+
     def verified?(identity, email) do
         query = from contact in Email.Model,
             where: contact.identity == ^identity and contact.email == ^email,

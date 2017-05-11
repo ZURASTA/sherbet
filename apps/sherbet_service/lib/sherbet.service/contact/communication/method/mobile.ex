@@ -37,6 +37,29 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
+    def make_primary(identity, mobile) do
+        query = from contact in Mobile.Model,
+            where: contact.identity == ^identity and contact.primary == true
+
+        transaction = case Sherbet.Service.Repo.one(query) do
+            nil -> Ecto.Multi.new
+            mobile ->
+                Ecto.Multi.new
+                |> Ecto.Multi.update(:make_secondary, Mobile.Model.update_changeset(mobile, %{ primary: false }))
+        end
+
+        query = from contact in Mobile.Model,
+            where: contact.identity == ^identity and contact.mobile == ^mobile
+
+        with { :mobile, mobile = %Mobile.Model{} } <- { :mobile, Sherbet.Service.Repo.one(query) },
+             { :update, { :ok, _ } } <- { :update, Sherbet.Service.Repo.transaction(Ecto.Multi.update(transaction, :make_primary, Mobile.Model.update_changeset(mobile, %{ primary: true }))) } do
+                :ok
+        else
+            { :mobile, _ } -> { :error, "Mobile does not exist" }
+            { :update, _ } -> { :error, "Failed to make mobile primary" }
+        end
+    end
+
     def verified?(identity, mobile) do
         query = from contact in Mobile.Model,
             where: contact.identity == ^identity and contact.mobile == ^mobile,
