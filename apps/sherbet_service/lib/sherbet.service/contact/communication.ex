@@ -20,6 +20,21 @@ defmodule Sherbet.Service.Contact.Communication do
     end
 
     @doc """
+      Add a communication type to be associated with the given identity. And set its
+      priority.
+
+      Returns `:ok` on successful addition. Otherwise returns a error.
+    """
+    @spec add(atom, String.t, :secondary | :primary, Auth.uuid) :: :ok | { :error, String.t }
+    def add(type, communication, :secondary, identity), do: add(type, communication, identity)
+    def add(type, communication, :primary, identity) do
+        case Communication.Method.add(type, identity, communication) do
+            :ok -> Communication.Method.make_primary(type, identity, communication)
+            error -> error
+        end
+    end
+
+    @doc """
       Remove a communication type from a given identity.
 
       Returns `:ok` on successful removal. Otherwise returns an error.
