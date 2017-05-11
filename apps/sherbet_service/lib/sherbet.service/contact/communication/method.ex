@@ -93,9 +93,9 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       If the operation was successful return `{ :ok, contacts }`, where `contacts` is
       the list of communication methods associated with the given identity and their
-      current verification status. Otherwise return an error.
+      current verification status and priority. Otherwise return an error.
     """
-    @callback contacts(identity :: Auth.uuid) :: { :ok, contacts :: [{ :unverified | :verified, String.t }] } | { :error, reason :: String.t }
+    @callback contacts(identity :: Auth.uuid) :: { :ok, contacts :: [{ :unverified | :verified, :secondary | :primary, String.t }] } | { :error, reason :: String.t }
 
     @doc """
       Associate a new contact with the given identity.
@@ -148,7 +148,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       Returns true if it is verified, otherwise false.
     """
-    @spec verified?(atom, Auth.uuid, String.t) :: boolean
+    @spec verified?(atom, Auth.uuid, String.t) :: { :ok, boolean } | { :error, String.t }
     def verified?(type, identity, contact) do
         atom_to_module(type).verified?(identity, contact)
     end
@@ -182,9 +182,9 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       If the operation was successful return `{ :ok, contacts }`, where `contacts` is
       the list of communication methods associated with the given identity and their
-      current verification status. Otherwise returns the reason of failure.
+      current verification status and priority. Otherwise returns the reason of failure.
     """
-    @spec contacts(atom, Auth.uuid) :: { :ok, [{ :unverified | :verified, String.t }] } | { :error, String.t }
+    @spec contacts(atom, Auth.uuid) :: { :ok, [{ :unverified | :verified, :secondary | :primary, String.t }] } | { :error, String.t }
     def contacts(type, identity) do
         atom_to_module(type).contacts(identity)
     end

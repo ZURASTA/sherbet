@@ -13,7 +13,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.MobileTest do
         assert :ok == Mobile.add(identity, "+100")
 
         { :ok, contacts } = Mobile.contacts(identity)
-        assert contacts == [{ :unverified, "+100" }]
+        assert contacts == [{ :unverified, :secondary, "+100" }]
         assert { :ok, false } == Mobile.verified?(identity, "+100")
     end
 
@@ -115,7 +115,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.MobileTest do
         assert { :error, "Invalid removal attempt" } == Mobile.finalise_removal("+100", "")
 
         { :ok, contacts } = Mobile.contacts(identity)
-        assert contacts == [{ :unverified, "+100" }]
+        assert contacts == [{ :unverified, :secondary, "+100" }]
     end
 
     test "remove non-existent mobile per request" do
@@ -144,7 +144,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.MobileTest do
         assert :ok == Mobile.finalise_verification(identity, "+100", key)
 
         { :ok, contacts } = Mobile.contacts(identity)
-        assert contacts == [{ :verified, "+100" }]
+        assert contacts == [{ :verified, :secondary, "+100" }]
         assert { :ok, true } == Mobile.verified?(identity, "+100")
     end
 
@@ -187,7 +187,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.MobileTest do
         assert { :error, "Invalid verification attempt" } == Mobile.finalise_verification(identity2, "+100", key)
 
         { :ok, contacts } = Mobile.contacts(identity)
-        assert contacts == [{ :unverified, "+100" }]
+        assert contacts == [{ :unverified, :secondary, "+100" }]
         assert { :ok, false } == Mobile.verified?(identity, "+100")
     end
 
@@ -201,7 +201,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.MobileTest do
         assert { :error, "Invalid verification attempt" } == Mobile.finalise_verification(identity, "+100", "")
 
         { :ok, contacts } = Mobile.contacts(identity)
-        assert contacts == [{ :unverified, "+100" }]
+        assert contacts == [{ :unverified, :secondary, "+100" }]
         assert { :ok, false } == Mobile.verified?(identity, "+100")
     end
 

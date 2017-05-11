@@ -3,6 +3,7 @@ defmodule Sherbet.Service.Contact.Communication do
       Provides interfaces to communications.
     """
 
+    import Ecto.Query
     require Logger
     alias Sherbet.Service.Contact.Communication
     alias Gobstopper.API.Auth
@@ -91,9 +92,9 @@ defmodule Sherbet.Service.Contact.Communication do
 
       If the operation was successful return `{ :ok, contacts }`, where `contacts` is
       the list of communication methods associated with the given identity and their
-      current verification status. Otherwise returns the reason of failure.
+      current verification status and priority. Otherwise returns the reason of failure.
     """
-    @spec contacts(atom, Auth.uuid) :: { :ok, [{ :unverified | :verified, String.t }] } | { :error, String.t }
+    @spec contacts(atom, Auth.uuid) :: { :ok, [{ :unverified | :verified, :secondary | :primary, String.t }] } | { :error, String.t }
     def contacts(type, identity) do
         Communication.Method.contacts(type, identity)
     end

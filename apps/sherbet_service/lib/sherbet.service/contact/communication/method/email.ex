@@ -51,14 +51,16 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
     def contacts(identity) do
         query = from contact in Email.Model,
             where: contact.identity == ^identity,
-            select: { contact.verified, contact.email }
+            select: { contact.verified, contact.primary, contact.email }
 
         {
             :ok,
             Sherbet.Service.Repo.all(query)
             |> Enum.map(fn
-                { true, email } -> { :verified, email }
-                { false, email } -> { :unverified, email }
+                { true, true, email } -> { :verified, :primary, email }
+                { false, true, email } -> { :unverified, :primary, email }
+                { true, false, email } -> { :verified, :secondary, email }
+                { false, false, email } -> { :unverified, :secondary, email }
             end)
         }
     end

@@ -51,14 +51,16 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
     def contacts(identity) do
         query = from contact in Mobile.Model,
             where: contact.identity == ^identity,
-            select: { contact.verified, contact.mobile }
+            select: { contact.verified, contact.primary, contact.mobile }
 
         {
             :ok,
             Sherbet.Service.Repo.all(query)
             |> Enum.map(fn
-                { true, mobile } -> { :verified, mobile }
-                { false, mobile } -> { :unverified, mobile }
+                { true, true, mobile } -> { :verified, :primary, mobile }
+                { false, true, mobile } -> { :unverified, :primary, mobile }
+                { true, false, mobile } -> { :verified, :secondary, mobile }
+                { false, false, mobile } -> { :unverified, :secondary, mobile }
             end)
         }
     end

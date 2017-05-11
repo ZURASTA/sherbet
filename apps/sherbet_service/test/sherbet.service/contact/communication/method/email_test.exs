@@ -13,7 +13,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.EmailTest do
         assert :ok == Email.add(identity, "foo@foo")
 
         { :ok, contacts } = Email.contacts(identity)
-        assert Enum.sort(contacts) == Enum.sort([{ :unverified, "foo@foo" }]) #Enum.sort([{ :unverified, "foo@bar" }, { :unverified, "foo@foo" }])
+        assert Enum.sort(contacts) == Enum.sort([{ :unverified, :secondary, "foo@foo" }]) #Enum.sort([{ :unverified, :primary, "foo@bar" }, { :unverified, :secondary, "foo@foo" }])
         assert { :ok, false } == Email.verified?(identity, "foo@foo")
     end
 
@@ -44,7 +44,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.EmailTest do
         assert :ok == Email.remove(identity, "foo@foo")
 
         { :ok, contacts } = Email.contacts(identity)
-        assert contacts == [] #[{ :unverified, "foo@bar" }]
+        assert contacts == [] #[{ :unverified, :primary, "foo@bar" }]
     end
 
     test "remove email from identity" do
@@ -56,7 +56,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.EmailTest do
         assert :ok == Email.remove(identity, "foo@foo")
 
         { :ok, contacts } = Email.contacts(identity)
-        assert contacts == [] #[{ :unverified, "foo@bar" }]
+        assert contacts == [] #[{ :unverified, :primary, "foo@bar" }]
     end
 
     test "remove non-existing email from identity" do
@@ -83,7 +83,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.EmailTest do
         assert :ok == Email.finalise_removal("foo@foo", key)
 
         { :ok, contacts } = Email.contacts(identity)
-        assert contacts == [] #[{ :unverified, "foo@bar" }]
+        assert contacts == [] #[{ :unverified, :primary, "foo@bar" }]
     end
 
     test "remove verified email per request" do
@@ -115,7 +115,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.EmailTest do
         assert { :error, "Invalid removal attempt" } == Email.finalise_removal("foo@foo", "")
 
         { :ok, contacts } = Email.contacts(identity)
-        assert contacts == [{ :unverified, "foo@foo" }] #Enum.sort([{ :unverified, "foo@foo" }, { :unverified, "foo@bar" }])
+        assert contacts == [{ :unverified, :secondary, "foo@foo" }] #Enum.sort([{ :unverified, :secondary, "foo@foo" }, { :unverified, :primary, "foo@bar" }])
     end
 
     test "remove non-existent email per request" do
@@ -144,7 +144,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.EmailTest do
         assert :ok == Email.finalise_verification(identity, "foo@foo", key)
 
         { :ok, contacts } = Email.contacts(identity)
-        assert contacts == [{ :verified, "foo@foo" }] #Enum.sort([{ :verified, "foo@foo" }, { :unverified, "foo@bar" }])
+        assert contacts == [{ :verified, :secondary, "foo@foo" }] #Enum.sort([{ :verified, :secondary, "foo@foo" }, { :unverified, :primary, "foo@bar" }])
         assert { :ok, true } == Email.verified?(identity, "foo@foo")
     end
 
@@ -187,7 +187,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.EmailTest do
         assert { :error, "Invalid verification attempt" } == Email.finalise_verification(identity2, "foo@foo", key)
 
         { :ok, contacts } = Email.contacts(identity)
-        assert contacts == [{ :unverified, "foo@foo" }] #Enum.sort([{ :unverified, "foo@foo" }, { :unverified, "foo@bar" }])
+        assert contacts == [{ :unverified, :secondary, "foo@foo" }] #Enum.sort([{ :unverified, :secondary, "foo@foo" }, { :unverified, :primary, "foo@bar" }])
         assert { :ok, false } == Email.verified?(identity, "foo@foo")
     end
 
@@ -201,7 +201,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.EmailTest do
         assert { :error, "Invalid verification attempt" } == Email.finalise_verification(identity, "foo@foo", "")
 
         { :ok, contacts } = Email.contacts(identity)
-        assert contacts == [{ :unverified, "foo@foo" }] #Enum.sort([{ :unverified, "foo@foo" }, { :unverified, "foo@bar" }])
+        assert contacts == [{ :unverified, :secondary, "foo@foo" }] #Enum.sort([{ :unverified, :secondary, "foo@foo" }, { :unverified, :primary, "foo@bar" }])
         assert { :ok, false } == Email.verified?(identity, "foo@foo")
     end
 
