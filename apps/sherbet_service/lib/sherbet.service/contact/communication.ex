@@ -98,4 +98,16 @@ defmodule Sherbet.Service.Contact.Communication do
     def contacts(type, identity) do
         Communication.Method.contacts(type, identity)
     end
+
+    @doc """
+      Get the primary communication of type associated with the given identity.
+
+      If the operation was successful return `{ :ok, contact }`, where `contact` is
+      the primary communication method associated with the given identity and its
+      current verification status. Otherwise returns the reason of failure.
+    """
+    @spec primary_contact(atom, Auth.uuid) :: { :ok, { :unverified | :verified, String.t } } | { :error, String.t }
+    def primary_contact(type, identity) do
+        Communication.Method.primary_contact(type, identity)
+    end
 end

@@ -98,6 +98,16 @@ defmodule Sherbet.Service.Contact.Communication.Method do
     @callback contacts(identity :: Auth.uuid) :: { :ok, contacts :: [{ :unverified | :verified, :secondary | :primary, String.t }] } | { :error, reason :: String.t }
 
     @doc """
+      Implement the behaviour for retrieving the primary contact of the communication
+      method for the given identity.
+
+      If the operation was successful return `{ :ok, contact }`, where `contact` is
+      the primary communication method associated with the given identity. Otherwise return
+      an error.
+    """
+    @callback primary_contact(identity :: Auth.uuid) :: { :ok, contact :: { :unverified | :verified, String.t } } | { :error, reason :: String.t }
+
+    @doc """
       Associate a new contact with the given identity.
 
       If the contact is already in use, it will return an error.
@@ -187,6 +197,18 @@ defmodule Sherbet.Service.Contact.Communication.Method do
     @spec contacts(atom, Auth.uuid) :: { :ok, [{ :unverified | :verified, :secondary | :primary, String.t }] } | { :error, String.t }
     def contacts(type, identity) do
         atom_to_module(type).contacts(identity)
+    end
+
+    @doc """
+      Get the primary contact associated with the given identity.
+
+      If the operation was successful return `{ :ok, contact }`, where `contact` is
+      the primary communication method associated with the given identity and its
+      current verification status. Otherwise returns the reason of failure.
+    """
+    @spec primary_contact(atom, Auth.uuid) :: { :ok, { :unverified | :verified, String.t } } | { :error, String.t }
+    def primary_contact(type, identity) do
+        atom_to_module(type).primary_contact(identity)
     end
 
     @spec atom_to_module(atom) :: atom
