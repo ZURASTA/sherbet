@@ -65,6 +65,18 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         }
     end
 
+    def primary_contact(identity) do
+        query = from contact in Mobile.Model,
+            where: contact.identity == ^identity and contact.primary == true,
+            select: { contact.verified, contact.mobile }
+
+        case Sherbet.Service.Repo.one(query) do
+            nil -> { :error, "No primary mobile exists" }
+            { true, mobile } -> { :ok, { :verified, mobile } }
+            { false, mobile } -> { :ok, { :unverified, mobile } }
+        end
+    end
+
     def request_removal(mobile) do
         query = from contact in Mobile.Model,
             where: contact.mobile == ^mobile,

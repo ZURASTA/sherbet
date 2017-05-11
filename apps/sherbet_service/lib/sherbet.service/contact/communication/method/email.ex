@@ -65,6 +65,18 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         }
     end
 
+    def primary_contact(identity) do
+        query = from contact in Email.Model,
+            where: contact.identity == ^identity and contact.primary == true,
+            select: { contact.verified, contact.email }
+
+        case Sherbet.Service.Repo.one(query) do
+            nil -> { :error, "No primary email exists" }
+            { true, email } -> { :ok, { :verified, email } }
+            { false, email } -> { :ok, { :unverified, email } }
+        end
+    end
+
     def request_removal(email) do
         query = from contact in Email.Model,
             where: contact.email == ^email,
