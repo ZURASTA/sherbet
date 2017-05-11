@@ -20,12 +20,16 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email.Model do
       ###:verified
       Indicates whether the email has been verified to belong to the given
       identity. Is a `boolean`.
+
+      ###:primary
+      Indicates whether the email is the primary email to be used. Is a `boolean`.
     """
 
     schema "emails" do
         field :identity, Ecto.UUID
         field :email, :string
         field :verified, :boolean
+        field :primary, :boolean
         timestamps()
     end
 
@@ -37,13 +41,16 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email.Model do
       * `email` field is required
       * `email` field is a valid email
       * `email` field is unique
+      * `primary_contact` field is
+      * checks uniqueness of primary contact (one per unique identity)
     """
     def insert_changeset(struct, params \\ %{}) do
         struct
-        |> cast(params, [:identity, :email, :verified])
+        |> cast(params, [:identity, :email, :verified, :primary])
         |> validate_required([:identity, :email])
         |> validate_email(:email)
         |> unique_constraint(:email)
+        |> unique_constraint(:primary_contact)
     end
 
     @doc """
@@ -55,14 +62,16 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email.Model do
       * `verified` field is not empty
       * `email` field is a valid email
       * `email` field is unique
+      * checks uniqueness of primary contact (one per unique identity)
     """
     def update_changeset(struct, params \\ %{}) do
         struct
-        |> cast(params, [:identity, :email, :verified])
+        |> cast(params, [:identity, :email, :verified, :primary])
         |> validate_emptiness(:identity)
         |> validate_emptiness(:email)
         |> validate_emptiness(:verified)
         |> validate_email(:email)
         |> unique_constraint(:email)
+        |> unique_constraint(:primary_contact)
     end
 end
