@@ -30,6 +30,20 @@ defmodule Sherbet.Service.Contact.Communication do
     end
 
     @doc """
+      Change a communication type associated with the identity to become a primary
+      communication for that method.
+
+      Will turn any other primary communication of that type for that identity into a
+      secondary communication option.
+
+      Returns `:ok` on successful change. Otherwise returns an error.
+    """
+    @spec make_primary(atom, String.t, Auth.uuid) :: :ok | { :error, String.t }
+    def make_primary(type, communication, identity) do
+        Communication.Method.make_primary(type, identity, communication)
+    end
+
+    @doc """
       Request a communication type associated with another identity, be removed.
 
       Removal requests only apply to unverified communications.
