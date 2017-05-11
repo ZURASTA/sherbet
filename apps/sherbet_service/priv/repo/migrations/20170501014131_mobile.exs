@@ -13,10 +13,15 @@ defmodule Sherbet.Service.Repo.Migrations.Mobile do
                 default: false,
                 null: false
 
+            add :primary, :boolean,
+                default: false,
+                null: false
+
             timestamps()
         end
 
         create index(:mobiles, [:identity], unique: false)
         create index(:mobiles, [:mobile], unique: true)
+        create index(:mobiles, [:identity, :primary], unique: true, where: "mobiles.primary IS true", name: :mobiles_primary_contact_index)
     end
 end
