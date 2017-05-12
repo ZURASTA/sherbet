@@ -1,7 +1,9 @@
 defmodule Sherbet.API.Contact.Email do
     @moduledoc """
-      Handles the authorization of session tokens.
+      Handles the management of email contacts.
     """
+
+    alias Gobstopper.API.Auth
 
     @service Sherbet.Service.Contact
     @credential_type :email
