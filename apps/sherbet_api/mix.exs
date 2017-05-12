@@ -10,6 +10,7 @@ defmodule Sherbet.API.Mixfile do
             deps_path: "../../deps",
             lockfile: "../../mix.lock",
             elixir: "~> 1.4",
+            elixirc_paths: elixirc_paths(Mix.env),
             build_embedded: Mix.env == :prod,
             start_permanent: Mix.env == :prod,
             deps: deps(Mix.Project.umbrella?),
@@ -24,6 +25,10 @@ defmodule Sherbet.API.Mixfile do
         [extra_applications: [:logger]]
     end
 
+    # Specifies which paths to compile per environment.
+    defp elixirc_paths(:test), do: ["lib", "test/support", "../sherbet_service/test/support"]
+    defp elixirc_paths(_),     do: ["lib"]
+
     # Dependencies can be Hex packages:
     #
     #   {:my_dep, "~> 0.3.0"}
@@ -37,6 +42,12 @@ defmodule Sherbet.API.Mixfile do
     #   {:my_app, in_umbrella: true}
     #
     # Type "mix help deps" for more examples and options
-    defp deps(false), do: [{ :sherbet_service, path: "../sherbet_service", only: :test }]
+    defp deps(false) do
+        [
+            { :sherbet_service, path: "../sherbet_service", only: :test },
+            { :defecto, github: "ScrimpyCat/Defecto", only: :test },
+            { :gobstopper_service, github: "ScrimpyCat/gobstopper", sparse: "apps/gobstopper_service", only: :test, override: true }
+        ]
+    end
     defp deps(true), do: []
 end
