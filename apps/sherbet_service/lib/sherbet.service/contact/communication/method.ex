@@ -123,7 +123,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       If the contact is already in use, it will return an error.
 
-      If the operation was successful return `:ok`.
+      Returns `:ok` if the operation was successful, otherwise returns an error.
     """
     @spec add(atom, Auth.uuid, String.t) :: :ok | { :error, String.t }
     def add(type, identity, contact) do
@@ -157,7 +157,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       If the contact is verified, then it should return an error.
 
-      If the operation was successful return `:ok`.
+      Returns `:ok` if the operation was successful, otherwise returns an error.
     """
     @spec request_removal(atom, String.t) :: :ok | { :error, String.t }
     def request_removal(type, contact) do
@@ -169,7 +169,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       If the contact is verified, then it should return an error.
 
-      If the operation was successful return `:ok`.
+      Returns `:ok` if the operation was successful, otherwise returns an error.
     """
     @spec finalise_removal(atom, String.t, String.t) :: :ok | { :error, String.t }
     def finalise_removal(type, contact, key) do
@@ -179,7 +179,9 @@ defmodule Sherbet.Service.Contact.Communication.Method do
     @doc """
       Check if a contact belonging to the given identity has been verified.
 
-      Returns true if it is verified, otherwise false.
+      Returns `{ :ok, verified }` if the operation was successful, where `verified`
+      is whether the email was verified (`true`) or not (`false`). Otherwise returns
+      an error.
     """
     @spec verified?(atom, Auth.uuid, String.t) :: { :ok, boolean } | { :error, String.t }
     def verified?(type, identity, contact) do
@@ -187,11 +189,11 @@ defmodule Sherbet.Service.Contact.Communication.Method do
     end
 
     @doc """
-    Request a contact be verified.
+      Request a contact be verified.
 
-    If the contact is already verified, then it should return an error.
+      If the contact is already verified, then it should return an error.
 
-    If the operation was successful return `:ok`.
+      Returns `:ok` if the operation was successful, otherwise returns an error.
     """
     @spec request_verification(atom, Auth.uuid, String.t) :: :ok | { :error, String.t }
     def request_verification(type, identity, contact) do
@@ -203,7 +205,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
       If the contact is already verified, then it should return an error.
 
-      If the operation was successful return `:ok`.
+      Returns `:ok` if the operation was successful, otherwise returns an error.
     """
     @spec finalise_verification(atom, Auth.uuid, String.t, String.t) :: :ok | { :error, String.t }
     def finalise_verification(type, identity, contact, key) do
@@ -213,7 +215,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
     @doc """
       Get a list of contacts associated with the given identity.
 
-      If the operation was successful return `{ :ok, contacts }`, where `contacts` is
+      Returns `{ :ok, contacts }` if the operation was successful, where `contacts` is
       the list of communication methods associated with the given identity and their
       current verification status and priority. Otherwise returns the reason of failure.
     """
@@ -225,7 +227,7 @@ defmodule Sherbet.Service.Contact.Communication.Method do
     @doc """
       Get the primary contact associated with the given identity.
 
-      If the operation was successful return `{ :ok, contact }`, where `contact` is
+      Returns `{ :ok, contact }` if the operation was successful, where `contact` is
       the primary communication method associated with the given identity and its
       current verification status. Otherwise returns the reason of failure.
     """
