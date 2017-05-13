@@ -109,6 +109,21 @@ defmodule Sherbet.API.Contact.Email do
     end
 
     @doc """
+      Check if an email belongs to the given identity.
+
+      Returns `{ :ok, belongs }` if the operation was successful, where `belongs`
+      is whether the email belongs to the identity (`true`) or not (`false`). Otherwise
+      returns an error.
+    """
+    @spec contact?(uuid, String.t) :: { :ok, boolean } | { :error, String.t }
+    def contact?(identity, email) do
+        case verified?(identity, email) do
+            { :ok, _ } -> { :ok, true }
+            { :error, _ } -> { :ok, false }
+        end
+    end
+
+    @doc """
       Get a list of emails associated with the given identity.
 
       Returns `{ :ok, contacts }` if the operation was successful, where `contacts` is

@@ -8,9 +8,11 @@ defmodule Sherbet.API.Contact.EmailTest do
     end
 
     test "associate email with identity", %{ identity: identity } do
+        assert { :ok, false } == Email.contact?(identity, "foo@foo")
         assert :ok == Email.add(identity, "foo@foo")
         assert { :ok, [{ :unverified, :secondary, "foo@foo" }] } == Email.contacts(identity)
         assert { :ok, false } == Email.verified?(identity, "foo@foo")
+        assert { :ok, true } == Email.contact?(identity, "foo@foo")
     end
 
     test "remove email from identity", %{ identity: identity } do
