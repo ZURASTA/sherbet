@@ -30,7 +30,7 @@ defmodule Sherbet.Service.Contact.Communication do
     def add(type, communication, :secondary, identity), do: add(type, communication, identity)
     def add(type, communication, :primary, identity) do
         case Communication.Method.add(type, identity, communication) do
-            :ok -> Communication.Method.make_primary(type, identity, communication)
+            :ok -> Communication.Method.set_priority(type, identity, communication, :primary)
             error -> error
         end
     end
@@ -46,17 +46,16 @@ defmodule Sherbet.Service.Contact.Communication do
     end
 
     @doc """
-      Change a communication type associated with the identity to become a primary
-      communication for that method.
+      Change a communication type associated with the identity to a new priority.
 
       Will turn any other primary communication of that type for that identity into a
       secondary communication option.
 
       Returns `:ok` on successful change. Otherwise returns an error.
     """
-    @spec make_primary(atom, String.t, uuid) :: :ok | { :error, String.t }
-    def make_primary(type, communication, identity) do
-        Communication.Method.make_primary(type, identity, communication)
+    @spec set_priority(atom, String.t, :secondary | :primary, uuid) :: :ok | { :error, String.t }
+    def set_priority(type, communication, priority, identity) do
+        Communication.Method.set_priority(type, identity, communication, priority)
     end
 
     @doc """

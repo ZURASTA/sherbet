@@ -183,15 +183,15 @@ defmodule Sherbet.Service.Contact.Communication.Method.MobileTest do
 
     test "setting mobile priority", %{ identity: identity } do
         assert :ok == Mobile.add(identity, "+100")
-        assert :ok == Mobile.make_primary(identity, "+100")
+        assert :ok == Mobile.set_priority(identity, "+100", :primary)
         assert { :ok, { :unverified, "+100" } } == Mobile.primary_contact(identity)
 
         assert :ok == Mobile.add(identity, "+1002")
         assert { :ok, { :unverified, "+100" } } == Mobile.primary_contact(identity)
-        assert :ok == Mobile.make_primary(identity, "+1002")
+        assert :ok == Mobile.set_priority(identity, "+1002", :primary)
         assert { :ok, { :unverified, "+1002" } } == Mobile.primary_contact(identity)
 
-        assert { :error, "Mobile does not exist" } == Mobile.make_primary(identity, "fake@foo")
+        assert { :error, "Mobile does not exist" } == Mobile.set_priority(identity, "fake@foo", :primary)
         assert { :ok, { :unverified, "+1002" } } == Mobile.primary_contact(identity)
 
         identity2 = Regex.replace(~r/[\da-f]/, identity, fn
@@ -213,7 +213,10 @@ defmodule Sherbet.Service.Contact.Communication.Method.MobileTest do
             "f", _ -> "0"
         end)
 
-        assert { :error, "Mobile does not exist" } == Mobile.make_primary(identity2, "+100")
+        assert { :error, "Mobile does not exist" } == Mobile.set_priority(identity2, "+100", :primary)
         assert { :ok, { :unverified, "+1002" } } == Mobile.primary_contact(identity)
+
+        assert :ok == Mobile.set_priority(identity, "+1002", :secondary)
+        assert { :error, "No primary mobile exists" } == Mobile.primary_contact(identity)
     end
 end

@@ -183,15 +183,15 @@ defmodule Sherbet.Service.Contact.Communication.Method.EmailTest do
 
     test "setting email priority", %{ identity: identity } do
         assert :ok == Email.add(identity, "foo@foo")
-        assert :ok == Email.make_primary(identity, "foo@foo")
+        assert :ok == Email.set_priority(identity, "foo@foo", :primary)
         assert { :ok, { :unverified, "foo@foo" } } == Email.primary_contact(identity)
 
         assert :ok == Email.add(identity, "foo@foo2")
         assert { :ok, { :unverified, "foo@foo" } } == Email.primary_contact(identity)
-        assert :ok == Email.make_primary(identity, "foo@foo2")
+        assert :ok == Email.set_priority(identity, "foo@foo2", :primary)
         assert { :ok, { :unverified, "foo@foo2" } } == Email.primary_contact(identity)
 
-        assert { :error, "Email does not exist" } == Email.make_primary(identity, "fake@foo")
+        assert { :error, "Email does not exist" } == Email.set_priority(identity, "fake@foo", :primary)
         assert { :ok, { :unverified, "foo@foo2" } } == Email.primary_contact(identity)
 
         identity2 = Regex.replace(~r/[\da-f]/, identity, fn
@@ -213,7 +213,10 @@ defmodule Sherbet.Service.Contact.Communication.Method.EmailTest do
             "f", _ -> "0"
         end)
 
-        assert { :error, "Email does not exist" } == Email.make_primary(identity2, "foo@foo")
+        assert { :error, "Email does not exist" } == Email.set_priority(identity2, "foo@foo", :primary)
         assert { :ok, { :unverified, "foo@foo2" } } == Email.primary_contact(identity)
+
+        assert :ok == Email.set_priority(identity, "foo@foo2", :secondary)
+        assert { :error, "No primary email exists" } == Email.primary_contact(identity)
     end
 end

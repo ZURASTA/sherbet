@@ -38,14 +38,14 @@ defmodule Sherbet.Service.Contact.Communication.Method do
 
     @doc """
       Implement the behaviour for setting a communication method associated with the
-      given identity to become the primary communication method for that identity.
+      given identity to a new priority.
 
-      Only one communication method per identity may be set as primary. If one already
-      exists, change it to secondary to allow for this new one to be made primary.
+      Only one communication method per identity may be set as `:primary`. If one already
+      exists, change it to secondary to allow for this new one to be made `:primary`.
 
       If the operation was successful return `:ok`. Otherwise return the error.
     """
-    @callback make_primary(identity :: uuid, contact :: String.t) :: :ok | { :error, reason :: String.t }
+    @callback set_priority(identity :: uuid, contact :: String.t, priority :: :secondary | :primary) :: :ok | { :error, reason :: String.t }
 
     @doc """
       Implement the behaviour for requesting an unverified communication method be removed.
@@ -141,15 +141,15 @@ defmodule Sherbet.Service.Contact.Communication.Method do
     end
 
     @doc """
-      Change a contact associated with the identity to become a primary contact.
+      Change a contact associated with the identity's priority.
 
       Will turn any other primary contact for that identity into a secondary contact.
 
       Returns `:ok` if the operation was successful, otherwise returns an error.
     """
-    @spec make_primary(atom, uuid, String.t) :: :ok | { :error, String.t }
-    def make_primary(type, identity, contact) do
-        atom_to_module(type).make_primary(identity, contact)
+    @spec set_priority(atom, uuid, String.t, :secondary | :primary) :: :ok | { :error, String.t }
+    def set_priority(type, identity, contact, priority) do
+        atom_to_module(type).set_priority(identity, contact, priority)
     end
 
     @doc """

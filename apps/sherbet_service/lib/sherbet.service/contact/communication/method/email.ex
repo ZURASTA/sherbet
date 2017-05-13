@@ -37,7 +37,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
-    def make_primary(identity, email) do
+    def set_priority(identity, email, :primary) do
         query = from contact in Email.Model,
             where: contact.identity == ^identity and contact.primary == true
 
@@ -57,6 +57,18 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         else
             { :email, _ } -> { :error, "Email does not exist" }
             { :update, _ } -> { :error, "Failed to make email primary" }
+        end
+    end
+    def set_priority(identity, email, :secondary) do
+        query = from contact in Email.Model,
+            where: contact.identity == ^identity and contact.email == ^email
+
+        with { :email, email = %Email.Model{} } <- { :email, Sherbet.Service.Repo.one(query) },
+             { :update, { :ok, _ } } <- { :update, Sherbet.Service.Repo.update(Email.Model.update_changeset(email, %{ primary: false })) } do
+                :ok
+        else
+            { :email, _ } -> { :error, "Email does not exist" }
+            { :update, _ } -> { :error, "Failed to make email secondary" }
         end
     end
 

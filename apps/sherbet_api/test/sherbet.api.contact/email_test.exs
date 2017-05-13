@@ -60,7 +60,7 @@ defmodule Sherbet.API.Contact.EmailTest do
 
         assert :ok == Email.add(identity, "foo@foo2")
         assert { :ok, { :unverified, "foo@foo" } } == Email.primary_contact(identity)
-        assert :ok == Email.make_primary(identity, "foo@foo2")
+        assert :ok == Email.set_priority(identity, "foo@foo2", :primary)
         assert { :ok, { :unverified, "foo@foo2" } } == Email.primary_contact(identity)
     end
 end

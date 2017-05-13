@@ -58,7 +58,7 @@ defmodule Sherbet.API.Contact.MobileTest do
 
         assert :ok == Mobile.add(identity, "+1002")
         assert { :ok, { :unverified, "+100" } } == Mobile.primary_contact(identity)
-        assert :ok == Mobile.make_primary(identity, "+1002")
+        assert :ok == Mobile.set_priority(identity, "+1002", :primary)
         assert { :ok, { :unverified, "+1002" } } == Mobile.primary_contact(identity)
     end
 end

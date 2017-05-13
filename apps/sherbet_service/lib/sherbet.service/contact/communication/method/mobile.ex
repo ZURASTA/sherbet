@@ -37,7 +37,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
-    def make_primary(identity, mobile) do
+    def set_priority(identity, mobile, :primary) do
         query = from contact in Mobile.Model,
             where: contact.identity == ^identity and contact.primary == true
 
@@ -57,6 +57,18 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         else
             { :mobile, _ } -> { :error, "Mobile does not exist" }
             { :update, _ } -> { :error, "Failed to make mobile primary" }
+        end
+    end
+    def set_priority(identity, mobile, :secondary) do
+        query = from contact in Mobile.Model,
+            where: contact.identity == ^identity and contact.mobile == ^mobile
+
+        with { :mobile, mobile = %Mobile.Model{} } <- { :mobile, Sherbet.Service.Repo.one(query) },
+             { :update, { :ok, _ } } <- { :update, Sherbet.Service.Repo.update(Mobile.Model.update_changeset(mobile, %{ primary: false })) } do
+                :ok
+        else
+            { :mobile, _ } -> { :error, "Mobile does not exist" }
+            { :update, _ } -> { :error, "Failed to make mobile secondary" }
         end
     end
 

@@ -39,17 +39,16 @@ defmodule Sherbet.API.Contact.Mobile do
     end
 
     @doc """
-      Make an mobile associated with the identity become the primary mobile contact for
-      that identity.
+      Set an mobile associated with the identity's priority.
 
       Will turn any other primary mobile contact for that identity into a secondary
       option.
 
       Returns `:ok` on successful change. Otherwise returns an error.
     """
-    @spec make_primary(uuid, String.t) :: :ok | { :error, String.t }
-    def make_primary(identity, mobile) do
-        GenServer.call(@service, { :make_primary, { @credential_type, mobile }, identity })
+    @spec set_priority(uuid, String.t, :secondary | :primary) :: :ok | { :error, String.t }
+    def set_priority(identity, mobile, priority) do
+        GenServer.call(@service, { :set_priority, { @credential_type, mobile, priority }, identity })
     end
 
     @doc """

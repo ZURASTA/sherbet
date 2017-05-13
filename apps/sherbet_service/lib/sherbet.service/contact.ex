@@ -10,7 +10,7 @@ defmodule Sherbet.Service.Contact do
     def handle_call({ :add, { type, contact }, identity }, _from, state), do: { :reply, Communication.add(type, contact, identity), state }
     def handle_call({ :add, { type, contact, priority }, identity }, _from, state), do: { :reply, Communication.add(type, contact, priority, identity), state }
     def handle_call({ :remove, { type, contact }, identity }, _from, state), do: { :reply, Communication.remove(type, contact, identity), state }
-    def handle_call({ :make_primary, { type, contact }, identity }, _from, state), do: { :reply, Communication.make_primary(type, contact, identity), state }
+    def handle_call({ :set_priority, { type, contact, priority }, identity }, _from, state), do: { :reply, Communication.set_priority(type, contact, priority, identity), state }
     def handle_call({ :request_removal, { type, contact } }, _from, state), do: { :reply, Communication.request_removal(type, contact), state }
     def handle_call({ :finalise_removal, { type, contact, key } }, _from, state), do: { :reply, Communication.finalise_removal(type, contact, key), state }
     def handle_call({ :verified?, { type, contact }, identity }, _from, state), do: { :reply, Communication.verified?(type, contact, identity), state }

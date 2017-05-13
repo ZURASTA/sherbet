@@ -39,17 +39,16 @@ defmodule Sherbet.API.Contact.Email do
     end
 
     @doc """
-      Make an email associated with the identity become the primary email contact for
-      that identity.
+      Set an email associated with the identity's priority.
 
       Will turn any other primary email contact for that identity into a secondary
       option.
 
       Returns `:ok` on successful change. Otherwise returns an error.
     """
-    @spec make_primary(uuid, String.t) :: :ok | { :error, String.t }
-    def make_primary(identity, email) do
-        GenServer.call(@service, { :make_primary, { @credential_type, email }, identity })
+    @spec set_priority(uuid, String.t, :secondary | :primary) :: :ok | { :error, String.t }
+    def set_priority(identity, email, priority) do
+        GenServer.call(@service, { :set_priority, { @credential_type, email, priority }, identity })
     end
 
     @doc """
