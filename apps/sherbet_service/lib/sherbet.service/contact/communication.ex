@@ -6,7 +6,8 @@ defmodule Sherbet.Service.Contact.Communication do
     import Ecto.Query
     require Logger
     alias Sherbet.Service.Contact.Communication
-    alias Gobstopper.API.Auth
+
+    @type uuid :: String.t
 
 
     @doc """
@@ -14,7 +15,7 @@ defmodule Sherbet.Service.Contact.Communication do
 
       Returns `:ok` on successful addition. Otherwise returns a error.
     """
-    @spec add(atom, String.t, Auth.uuid) :: :ok | { :error, String.t }
+    @spec add(atom, String.t, uuid) :: :ok | { :error, String.t }
     def add(type, communication, identity) do
         Communication.Method.add(type, identity, communication)
     end
@@ -25,7 +26,7 @@ defmodule Sherbet.Service.Contact.Communication do
 
       Returns `:ok` on successful addition. Otherwise returns a error.
     """
-    @spec add(atom, String.t, :secondary | :primary, Auth.uuid) :: :ok | { :error, String.t }
+    @spec add(atom, String.t, :secondary | :primary, uuid) :: :ok | { :error, String.t }
     def add(type, communication, :secondary, identity), do: add(type, communication, identity)
     def add(type, communication, :primary, identity) do
         case Communication.Method.add(type, identity, communication) do
@@ -39,7 +40,7 @@ defmodule Sherbet.Service.Contact.Communication do
 
       Returns `:ok` on successful removal. Otherwise returns an error.
     """
-    @spec remove(atom, String.t, Auth.uuid) :: :ok | { :error, String.t }
+    @spec remove(atom, String.t, uuid) :: :ok | { :error, String.t }
     def remove(type, communication, identity) do
         Communication.Method.remove(type, identity, communication)
     end
@@ -53,7 +54,7 @@ defmodule Sherbet.Service.Contact.Communication do
 
       Returns `:ok` on successful change. Otherwise returns an error.
     """
-    @spec make_primary(atom, String.t, Auth.uuid) :: :ok | { :error, String.t }
+    @spec make_primary(atom, String.t, uuid) :: :ok | { :error, String.t }
     def make_primary(type, communication, identity) do
         Communication.Method.make_primary(type, identity, communication)
     end
@@ -89,7 +90,7 @@ defmodule Sherbet.Service.Contact.Communication do
       is whether the email was verified (`true`) or not (`false`). Otherwise returns
       an error.
     """
-    @spec verified?(atom, String.t, Auth.uuid) :: { :ok, boolean } | { :error, String.t }
+    @spec verified?(atom, String.t, uuid) :: { :ok, boolean } | { :error, String.t }
     def verified?(type, communication, identity) do
         Communication.Method.verified?(type, identity, communication)
     end
@@ -101,7 +102,7 @@ defmodule Sherbet.Service.Contact.Communication do
 
       Returns `:ok` if request was successful. Otherwise returns an error.
     """
-    @spec request_verification(atom, String.t, Auth.uuid) :: :ok | { :error, String.t }
+    @spec request_verification(atom, String.t, uuid) :: :ok | { :error, String.t }
     def request_verification(type, communication, identity) do
         Communication.Method.request_verification(type, identity, communication)
     end
@@ -113,7 +114,7 @@ defmodule Sherbet.Service.Contact.Communication do
 
       Returns `:ok` if verification was successful. Otherwise returns an error.
     """
-    @spec finalise_verification(atom, String.t, String.t, Auth.uuid) :: :ok | { :error, String.t }
+    @spec finalise_verification(atom, String.t, String.t, uuid) :: :ok | { :error, String.t }
     def finalise_verification(type, communication, key, identity) do
         Communication.Method.finalise_verification(type, identity, communication, key)
     end
@@ -125,7 +126,7 @@ defmodule Sherbet.Service.Contact.Communication do
       the list of communication methods associated with the given identity and their
       current verification status and priority. Otherwise returns the reason of failure.
     """
-    @spec contacts(atom, Auth.uuid) :: { :ok, [{ :unverified | :verified, :secondary | :primary, String.t }] } | { :error, String.t }
+    @spec contacts(atom, uuid) :: { :ok, [{ :unverified | :verified, :secondary | :primary, String.t }] } | { :error, String.t }
     def contacts(type, identity) do
         Communication.Method.contacts(type, identity)
     end
@@ -137,7 +138,7 @@ defmodule Sherbet.Service.Contact.Communication do
       the primary communication method associated with the given identity and its
       current verification status. Otherwise returns the reason of failure.
     """
-    @spec primary_contact(atom, Auth.uuid) :: { :ok, { :unverified | :verified, String.t } } | { :error, String.t }
+    @spec primary_contact(atom, uuid) :: { :ok, { :unverified | :verified, String.t } } | { :error, String.t }
     def primary_contact(type, identity) do
         Communication.Method.primary_contact(type, identity)
     end

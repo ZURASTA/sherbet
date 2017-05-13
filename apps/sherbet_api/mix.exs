@@ -45,8 +45,7 @@ defmodule Sherbet.API.Mixfile do
     defp deps(false) do
         [
             { :sherbet_service, path: "../sherbet_service", only: :test },
-            { :defecto, github: "ScrimpyCat/Defecto", only: :test },
-            { :gobstopper_service, github: "ScrimpyCat/gobstopper", sparse: "apps/gobstopper_service", only: :test, override: true }
+            { :defecto, github: "ScrimpyCat/Defecto", only: :test }
         ]
     end
     defp deps(true), do: []

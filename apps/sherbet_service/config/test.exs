@@ -11,5 +11,3 @@ config :sherbet_service, Sherbet.Service.Repo,
     database: "sherbet_service_test",
     hostname: "localhost",
     pool: Ecto.Adapters.SQL.Sandbox
-
-import_config "../../../deps/gobstopper/apps/gobstopper_service/config/config.exs"
