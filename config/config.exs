@@ -9,9 +9,8 @@ use Mix.Config
 # back to each application for organization purposes.
 import_config "../apps/*/config/config.exs"
 
-# Sample configuration (overrides the imported configuration above):
-#
-#     config :logger, :console,
-#       level: :info,
-#       format: "$date $time [$level] $metadata$message\n",
-#       metadata: [:user_id]
+if Mix.env == :dev do
+    import_config "simple_markdown_rules.exs"
+
+    config :ex_doc, :markdown_processor, SimpleMarkdown
+end
