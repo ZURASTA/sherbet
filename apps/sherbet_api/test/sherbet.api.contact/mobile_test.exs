@@ -8,9 +8,12 @@ defmodule Sherbet.API.Contact.MobileTest do
     end
 
     test "associate mobile with identity", %{ identity: identity } do
+        assert { :ok, false } == Mobile.contact?(identity, "+100")
         assert :ok == Mobile.add(identity, "+100")
         assert { :ok, [{ :unverified, :secondary, "+100" }] } == Mobile.contacts(identity)
         assert { :ok, false } == Mobile.verified?(identity, "+100")
+        assert { :ok, true } == Mobile.contact?(identity, "+100")
+        assert { :ok, identity } == Mobile.owner("+100")
     end
 
     test "remove mobile from identity", %{ identity: identity } do

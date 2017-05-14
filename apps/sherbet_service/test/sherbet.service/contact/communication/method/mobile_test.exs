@@ -12,6 +12,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.MobileTest do
 
         assert { :ok, [{ :unverified, :secondary, "+100" }] } == Mobile.contacts(identity)
         assert { :ok, false } == Mobile.verified?(identity, "+100")
+        assert { :ok, identity } == Mobile.owner("+100")
     end
 
     test "associate pre-existing mobile with identity", %{ identity: identity } do

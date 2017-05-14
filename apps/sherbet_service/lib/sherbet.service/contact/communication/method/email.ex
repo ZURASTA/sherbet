@@ -112,6 +112,17 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
+    def owner(email) do
+        query = from contact in Email.Model,
+            where: contact.email == ^email,
+            select: contact.identity
+
+        case Sherbet.Service.Repo.one(query) do
+            nil -> { :error, "Email is not associated with any identity" }
+            identity -> { :ok, identity }
+        end
+    end
+
     def request_removal(email) do
         query = from contact in Email.Model,
             where: contact.email == ^email,

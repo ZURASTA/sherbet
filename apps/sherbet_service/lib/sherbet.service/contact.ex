@@ -18,4 +18,5 @@ defmodule Sherbet.Service.Contact do
     def handle_call({ :finalise_verification, { type, contact, key }, identity }, _from, state), do: { :reply, Communication.finalise_verification(type, contact, key, identity), state }
     def handle_call({ :contacts, { type }, identity }, _from, state), do: { :reply, Communication.contacts(type, identity), state }
     def handle_call({ :primary_contact, { type }, identity }, _from, state), do: { :reply, Communication.primary_contact(type, identity), state }
+    def handle_call({ :owner, { type, contact } }, _from, state), do: { :reply, Communication.owner(type, contact), state }
 end

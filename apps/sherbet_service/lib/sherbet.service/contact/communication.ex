@@ -141,4 +141,15 @@ defmodule Sherbet.Service.Contact.Communication do
     def primary_contact(type, identity) do
         Communication.Method.primary_contact(type, identity)
     end
+
+    @doc """
+      Get the owning identity for the specific communication of type.
+
+      Returns `{ :ok, identity }` if the operation was successful. Otherwise returns
+      the reason of failure.
+    """
+    @spec owner(atom, String.t) :: { :ok, uuid } | { :error, String.t }
+    def owner(type, communication) do
+        Communication.Method.owner(type, communication)
+    end
 end

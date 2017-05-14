@@ -12,6 +12,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.EmailTest do
 
         assert { :ok, [{ :unverified, :secondary, "foo@foo" }] } == Email.contacts(identity)
         assert { :ok, false } == Email.verified?(identity, "foo@foo")
+        assert { :ok, identity } == Email.owner("foo@foo")
     end
 
     test "associate pre-existing email with identity", %{ identity: identity } do

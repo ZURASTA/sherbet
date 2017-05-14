@@ -145,4 +145,15 @@ defmodule Sherbet.API.Contact.Email do
     def primary_contact(identity) do
         GenServer.call(@service, { :primary_contact, { @credential_type }, identity })
     end
+
+    @doc """
+      Get the owning identity for the specific email.
+
+      Returns `{ :ok, identity }` if the operation was successful. Otherwise returns
+      the reason of failure.
+    """
+    @spec owner(String.t) :: { :ok, uuid } | { :error, String.t }
+    def owner(email) do
+        GenServer.call(@service, { :owner, { @credential_type, email } })
+    end
 end

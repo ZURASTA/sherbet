@@ -119,6 +119,16 @@ defmodule Sherbet.Service.Contact.Communication.Method do
     @callback primary_contact(identity :: uuid) :: { :ok, contact :: { :unverified | :verified, String.t } } | { :error, reason :: String.t }
 
     @doc """
+      Implement the behaviour for retrieving the owning identity for the specific communicaton
+      method.
+
+      If the operation was successful return `{ :ok, identity }`, where `identity` is the UUID
+      reference that is associated with the given communication method. Otherwise return an
+      error..
+    """
+    @callback owner(contact :: String.t) :: { :ok, identity :: uuid } | { :error, String.t }
+
+    @doc """
       Associate a new contact with the given identity.
 
       If the contact is already in use, it will return an error.
@@ -234,6 +244,17 @@ defmodule Sherbet.Service.Contact.Communication.Method do
     @spec primary_contact(atom, uuid) :: { :ok, { :unverified | :verified, String.t } } | { :error, String.t }
     def primary_contact(type, identity) do
         atom_to_module(type).primary_contact(identity)
+    end
+
+    @doc """
+      Get the owning identity for the specific contact.
+
+      Returns `{ :ok, identity }` if the operation was successful. Otherwise returns
+      the reason of failure.
+    """
+    @spec owner(atom, String.t) :: { :ok, uuid } | { :error, String.t }
+    def owner(type, contact) do
+        atom_to_module(type).owner(contact)
     end
 
     @spec atom_to_module(atom) :: atom

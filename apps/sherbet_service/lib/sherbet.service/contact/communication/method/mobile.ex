@@ -112,6 +112,17 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
+    def owner(mobile) do
+        query = from contact in Mobile.Model,
+            where: contact.mobile == ^mobile,
+            select: contact.identity
+
+        case Sherbet.Service.Repo.one(query) do
+            nil -> { :error, "Mobile is not associated with any identity" }
+            identity -> { :ok, identity }
+        end
+    end
+
     def request_removal(mobile) do
         query = from contact in Mobile.Model,
             where: contact.mobile == ^mobile,
