@@ -37,17 +37,8 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
-    def set_priority(identity, email, :primary) do
-        query = from contact in Email.Model,
-            where: contact.identity == ^identity and contact.primary == true
-
-        transaction = case Sherbet.Service.Repo.one(query) do
-            nil -> Ecto.Multi.new
-            email ->
-                Ecto.Multi.new
-                |> Ecto.Multi.update(:make_secondary, Email.Model.update_changeset(email, %{ primary: false }))
-        end
-
+    defp make_primary(:already_primary, identity, email), do: :ok
+    defp make_primary(transaction, identity, email) do
         query = from contact in Email.Model,
             where: contact.identity == ^identity and contact.email == ^email
 
@@ -58,6 +49,20 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
             { :email, _ } -> { :error, "Email does not exist" }
             { :update, _ } -> { :error, "Failed to make email primary" }
         end
+    end
+
+    def set_priority(identity, email, :primary) do
+        query = from contact in Email.Model,
+            where: contact.identity == ^identity and contact.primary == true
+
+        case Sherbet.Service.Repo.one(query) do
+            nil -> Ecto.Multi.new
+            %Email.Model{ email: ^email } -> :already_primary
+            email ->
+                Ecto.Multi.new
+                |> Ecto.Multi.update(:make_secondary, Email.Model.update_changeset(email, %{ primary: false }))
+        end
+        |> make_primary(identity, email)
     end
     def set_priority(identity, email, :secondary) do
         query = from contact in Email.Model,

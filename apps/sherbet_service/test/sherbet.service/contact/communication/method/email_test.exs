@@ -217,6 +217,9 @@ defmodule Sherbet.Service.Contact.Communication.Method.EmailTest do
         assert { :error, "Email does not exist" } == Email.set_priority(identity2, "foo@foo", :primary)
         assert { :ok, { :unverified, "foo@foo2" } } == Email.primary_contact(identity)
 
+        assert :ok == Email.set_priority(identity, "foo@foo2", :primary)
+        assert { :ok, { :unverified, "foo@foo2" } } == Email.primary_contact(identity)
+
         assert :ok == Email.set_priority(identity, "foo@foo2", :secondary)
         assert { :error, "No primary email exists" } == Email.primary_contact(identity)
     end

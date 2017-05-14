@@ -37,17 +37,8 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
-    def set_priority(identity, mobile, :primary) do
-        query = from contact in Mobile.Model,
-            where: contact.identity == ^identity and contact.primary == true
-
-        transaction = case Sherbet.Service.Repo.one(query) do
-            nil -> Ecto.Multi.new
-            mobile ->
-                Ecto.Multi.new
-                |> Ecto.Multi.update(:make_secondary, Mobile.Model.update_changeset(mobile, %{ primary: false }))
-        end
-
+    defp make_primary(:already_primary, identity, mobile), do: :ok
+    defp make_primary(transaction, identity, mobile) do
         query = from contact in Mobile.Model,
             where: contact.identity == ^identity and contact.mobile == ^mobile
 
@@ -58,6 +49,20 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
             { :mobile, _ } -> { :error, "Mobile does not exist" }
             { :update, _ } -> { :error, "Failed to make mobile primary" }
         end
+    end
+
+    def set_priority(identity, mobile, :primary) do
+        query = from contact in Mobile.Model,
+            where: contact.identity == ^identity and contact.primary == true
+
+        case Sherbet.Service.Repo.one(query) do
+            nil -> Ecto.Multi.new
+            %Mobile.Model{ mobile: ^mobile } -> :already_primary
+            mobile ->
+                Ecto.Multi.new
+                |> Ecto.Multi.update(:make_secondary, Mobile.Model.update_changeset(mobile, %{ primary: false }))
+        end
+        |> make_primary(identity, mobile)
     end
     def set_priority(identity, mobile, :secondary) do
         query = from contact in Mobile.Model,

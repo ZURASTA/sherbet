@@ -217,6 +217,9 @@ defmodule Sherbet.Service.Contact.Communication.Method.MobileTest do
         assert { :error, "Mobile does not exist" } == Mobile.set_priority(identity2, "+100", :primary)
         assert { :ok, { :unverified, "+1002" } } == Mobile.primary_contact(identity)
 
+        assert :ok == Mobile.set_priority(identity, "+1002", :primary)
+        assert { :ok, { :unverified, "+1002" } } == Mobile.primary_contact(identity)
+
         assert :ok == Mobile.set_priority(identity, "+1002", :secondary)
         assert { :error, "No primary mobile exists" } == Mobile.primary_contact(identity)
     end
