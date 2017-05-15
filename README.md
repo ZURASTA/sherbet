@@ -56,8 +56,9 @@ Mobile verification/removal requests are delivered by __todo: sms service__.
 Todo
 ----
 
--[ ] Deliver verification/removal requests for `Sherbet.Service.Contact.Communication.Method.Email`.
--[ ] Removal request key timeout for `Sherbet.Service.Contact.Communication.Method.Email`.
--[ ] Deliver verification/removal requests for `Sherbet.Service.Contact.Communication.Method.Mobile`.
--[ ] Removal request key timeout for `Sherbet.Service.Contact.Communication.Method.Mobile`.
--[ ] Expose some attributes (key sizes, timeout times, etc.) to config.
+- [ ] Deliver verification/removal requests for `Sherbet.Service.Contact.Communication.Method.Email`.
+- [ ] Removal request key timeout for `Sherbet.Service.Contact.Communication.Method.Email`.
+- [ ] Deliver verification/removal requests for `Sherbet.Service.Contact.Communication.Method.Mobile`.
+- [ ] Removal request key timeout for `Sherbet.Service.Contact.Communication.Method.Mobile`.
+- [ ] Expose some attributes (key sizes, timeout times, etc.) to config.
+- [ ] PubSub.
