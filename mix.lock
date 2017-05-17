@@ -28,7 +28,7 @@
   "poolboy": {:hex, :poolboy, "1.5.1", "6b46163901cfd0a1b43d692657ed9d7e599853b3b21b95ae5ae0a777cf9b6ca8", [:rebar], []},
   "postgrex": {:hex, :postgrex, "0.13.2", "2b88168fc6a5456a27bfb54ccf0ba4025d274841a7a3af5e5deb1b755d95154e", [:mix], [{:connection, "~> 1.0", [hex: :connection, optional: false]}, {:db_connection, "~> 1.1", [hex: :db_connection, optional: false]}, {:decimal, "~> 1.0", [hex: :decimal, optional: false]}]},
   "protecto": {:git, "https://github.com/ScrimpyCat/Protecto.git", "4047f5a7699b93136d7852a5db64e1e2096c193f", []},
-  "simple_markdown": {:hex, :simple_markdown, "0.2.1", "c61b5d76854086dd6afbcf3cfa90be08616ec704f34a14233ed4403e103e335c", [:mix], [{:html_entities, "~> 0.3", [hex: :html_entities, optional: false]}, {:parsey, "~> 0.0.2", [hex: :parsey, optional: false]}]},
+  "simple_markdown": {:hex, :simple_markdown, "0.3.0", "5e5cc27c67cec3fb7994124e42f9be3272845e9b06d3b2c810fa85694ed80932", [:mix], [{:html_entities, "~> 0.3", [hex: :html_entities, optional: false]}, {:parsey, "~> 0.0.2", [hex: :parsey, optional: false]}]},
   "simple_markdown_extension_highlight_js": {:hex, :simple_markdown_extension_highlight_js, "0.0.1", "626130eb5ba33b46dd0d63a0324137d9c67804f50755d20efcc7c7dddbaab2d4", [:mix], [{:html_entities, "~> 0.3", [hex: :html_entities, optional: false]}, {:httpoison, "~> 0.9", [hex: :httpoison, optional: false]}, {:simple_markdown, "~> 0.2.1", [hex: :simple_markdown, optional: false]}]},
   "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.1", "28a4d65b7f59893bc2c7de786dec1e1555bd742d336043fe644ae956c3497fbe", [:make, :rebar], []},
   "uuid": {:hex, :uuid, "1.1.7", "007afd58273bc0bc7f849c3bdc763e2f8124e83b957e515368c498b641f7ab69", [:mix], []}}

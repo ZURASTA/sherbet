@@ -11,8 +11,8 @@ defmodule Sherbet.Mixfile do
             name: "Sherbet",
             source_url: "https://github.com/ScrimpyCat/sherbet",
             docs: [
-                main: "readme",
-                extras: ["README.md"]
+                main: "sherbet",
+                extras: ["README.md": [filename: "sherbet", title: "Sherbet"]]
             ]
         ]
     end
@@ -32,7 +32,7 @@ defmodule Sherbet.Mixfile do
     defp deps do
         [
             { :ex_doc, "~> 0.15.1", only: :dev, runtime: false },
-            { :simple_markdown, "~> 0.2.1", only: :dev, runtime: false }
+            { :simple_markdown, "~> 0.3.0", only: :dev, runtime: false }
         ]
     end
 end

@@ -45,6 +45,7 @@ config :simple_markdown,
                 include: [separator: %{ match: ~r/\A\|/, ignore: true }]
             }]
         },
+        task_list: %{ match: ~r/\A- \[( |x|X)\] .*(\n- \[( |x|X)\] .*)*/, capture: 0, exclude: [:paragraph, :task_list], include: [task: %{ match: ~r/\A- \[ \] (.*)/, option: :deselected }, task: %{ match: ~r/\A- \[(x|X)\] (.*)/, option: :selected }] },
         list: %{ match: ~r/\A\*[[:blank:]]+.*(\n([[:blank:]]|\*).*)*/, capture: 0, option: :unordered, exclude: [:paragraph, :list], include: [item: ~r/(?<=\* ).*/] },
         list: %{ match: ~r/\A[[:digit:]]\.[[:blank:]]+.*(\n([[:blank:]]|([[:digit:]]\.)).*)*/, capture: 0, option: :ordered, exclude: [:paragraph, :list], include: [item: ~r/(?<=\. ).*/] },
         preformatted_code: %{ match: ~r/\A(\n*( {4,}|\t{1,}).*)+/, capture: 0, format: &(Regex.scan(~r/((?<=    )|(?<=\t)).*/, &1) |> Enum.join("\n")), rules: [] },
