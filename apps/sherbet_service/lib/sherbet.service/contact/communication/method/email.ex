@@ -6,6 +6,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
     @behaviour Sherbet.Service.Contact.Communication.Method
 
     alias Sherbet.Service.Contact.Communication.Method.Email
+    alias Cake.API.Mailer
     require Logger
     import Ecto.Query
 
@@ -134,9 +135,13 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
             select: { contact.id, contact.verified }
 
         with { :email, { id, false } } <- { :email, Sherbet.Service.Repo.one(query) },
-             { :key, { :ok, _ } } <- { :key, Sherbet.Service.Repo.insert(Email.RemovalKey.Model.changeset(%Email.RemovalKey.Model{}, %{ email_id: id, key: generate_key() })) } do
-                #todo: send unique key to the email (use mailing service to send the message)
-                :ok
+             { :key, { :ok, removal } } <- { :key, Sherbet.Service.Repo.insert(Email.RemovalKey.Model.changeset(%Email.RemovalKey.Model{}, %{ email_id: id, key: generate_key() })) } do
+                case Mailer.post(%Email.RemovalKey.Template{ email: email, key: removal.key }) do
+                    { :ok, _ } -> :ok
+                    { :error, _ } ->
+                        Sherbet.Service.Repo.delete(removal)
+                        { :error, "Failed to deliver removal key to email" }
+                end
         else
             { :email, nil } -> { :error, "Email does not exist" }
             { :email, { _, true } } -> { :error, "Email is verified" }
@@ -171,9 +176,13 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
             select: { contact.id, contact.verified }
 
         with { :email, { id, false } } <- { :email, Sherbet.Service.Repo.one(query) },
-             { :key, { :ok, _ } } <- { :key, Sherbet.Service.Repo.insert(Email.VerificationKey.Model.changeset(%Email.VerificationKey.Model{}, %{ email_id: id, key: generate_key() })) } do
-                #todo: send unique key to the email (use mailing service to send the message)
-                :ok
+             { :key, { :ok, verification } } <- { :key, Sherbet.Service.Repo.insert(Email.VerificationKey.Model.changeset(%Email.VerificationKey.Model{}, %{ email_id: id, key: generate_key() })) } do
+                case Mailer.post(%Email.VerificationKey.Template{ email: email, key: verification.key }) do
+                    { :ok, _ } -> :ok
+                    { :error, _ } ->
+                        Sherbet.Service.Repo.delete(verification)
+                        { :error, "Failed to deliver verification key to email" }
+                end
         else
             { :email, nil } -> { :error, "Email does not exist" }
             { :email, { _, true } } -> { :error, "Email is verified" }

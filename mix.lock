@@ -1,4 +1,7 @@
 %{"base64url": {:hex, :base64url, "0.0.1", "36a90125f5948e3afd7be97662a1504b934dd5dac78451ca6e9abf85a10286be", [:rebar], []},
+  "cake_api": {:git, "https://github.com/ScrimpyCat/cake.git", "006e3c010296a16bc1637ba3dd555036abcf7c7b", [sparse: "apps/cake_api"]},
+  "cake_email": {:git, "https://github.com/ScrimpyCat/cake.git", "006e3c010296a16bc1637ba3dd555036abcf7c7b", [sparse: "apps/cake_email"]},
+  "cake_service": {:git, "https://github.com/ScrimpyCat/cake.git", "006e3c010296a16bc1637ba3dd555036abcf7c7b", [sparse: "apps/cake_service"]},
   "certifi": {:hex, :certifi, "1.1.0", "c9b71a547016c2528a590ccfc28de786c7edb74aafa17446b84f54e04efc00ee", [:rebar3], []},
   "comeonin": {:hex, :comeonin, "3.0.2", "8b213268a6634bd2e31a8035a963e974681d13ccc1f73f2ae664b6ac4e993c96", [:make, :mix], [{:elixir_make, "~> 0.4", [hex: :elixir_make, optional: false]}]},
   "connection": {:hex, :connection, "1.0.4", "a1cae72211f0eef17705aaededacac3eb30e6625b04a6117c1b2db6ace7d5976", [:mix], []},
@@ -31,4 +34,5 @@
   "simple_markdown": {:hex, :simple_markdown, "0.3.0", "5e5cc27c67cec3fb7994124e42f9be3272845e9b06d3b2c810fa85694ed80932", [:mix], [{:html_entities, "~> 0.3", [hex: :html_entities, optional: false]}, {:parsey, "~> 0.0.2", [hex: :parsey, optional: false]}]},
   "simple_markdown_extension_highlight_js": {:hex, :simple_markdown_extension_highlight_js, "0.0.1", "626130eb5ba33b46dd0d63a0324137d9c67804f50755d20efcc7c7dddbaab2d4", [:mix], [{:html_entities, "~> 0.3", [hex: :html_entities, optional: false]}, {:httpoison, "~> 0.9", [hex: :httpoison, optional: false]}, {:simple_markdown, "~> 0.2.1", [hex: :simple_markdown, optional: false]}]},
   "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.1", "28a4d65b7f59893bc2c7de786dec1e1555bd742d336043fe644ae956c3497fbe", [:make, :rebar], []},
+  "swoosh": {:hex, :swoosh, "0.8.0", "de7ef3230f3968547eaa002adeeae5508e4370a660eac2985cb3bae92f69c598", [:mix], [{:cowboy, "~> 1.0", [hex: :cowboy, optional: true]}, {:gen_smtp, "~> 0.11", [hex: :gen_smtp, optional: true]}, {:hackney, "~> 1.6", [hex: :hackney, optional: false]}, {:mime, "~> 1.1", [hex: :mime, optional: false]}, {:plug, "~> 1.1", [hex: :plug, optional: true]}, {:poison, "~> 1.5 or ~> 2.0 or ~> 3.0", [hex: :poison, optional: false]}]},
   "uuid": {:hex, :uuid, "1.1.7", "007afd58273bc0bc7f849c3bdc763e2f8124e83b957e515368c498b641f7ab69", [:mix], []}}
