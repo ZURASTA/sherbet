@@ -9,19 +9,27 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email.RemovalKey.Template
     ]
 
     def format(%{ email: email, key: key }) do
-        %Email{
-            from: { "example", "noreply@example.com" },
-            to: email,
+        case Application.get_env(:sherbet_service, :email, [removal: [
+            sender: { "example", "noreply@example.com" },
             subject: "Remove Email",
-            body: %Email.Body{
-                text: """
-                Hello,
+            remove_link: &("https://example.com/remove?email=#{&1}&key=#{&2}")
+        ]])[:removal] do
+            formatter when is_function(formatter, 2) -> formatter.(email, key)
+            state ->
+                %Email{
+                    from: state[:sender],
+                    to: email,
+                    subject: state[:subject],
+                    body: %Email.Body{
+                        text: """
+                        Hello,
 
-                If you requested a removal link for #{email}. Please verify this by following the link https://example.com/remove?email=#{email}&key=#{key}
+                        If you requested a removal link for #{email}. Please verify this by following the link #{state[:remove_link].(email, key)}
 
-                If you didn't please ignore this email, or request a verification link.
-                """
-            }
-        }
+                        If you didn't please ignore this email, or request a verification link.
+                        """
+                    }
+                }
+        end
     end
 end
