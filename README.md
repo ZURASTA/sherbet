@@ -43,7 +43,7 @@ Support for contacts can be added by implementing the behaviours in `Sherbet.Ser
 
 Support for email based contacts is provided by the `Sherbet.Service.Contact.Communication.Method.Email` implementation.
 
-Email verification/removal requests are delivered by __todo: mailer/email delivery service__.
+Email verification/removal requests are delivered using the `Cake` service. The templates for those emails can be customised in the config file, more information on how to customise them can be found in `Sherbet.Service.Contact.Communication.Method.Email.VerificationKey.Template` and `Sherbet.Service.Contact.Communication.Method.Email.RemovalKey.Template`.
 
 
 ### Mobile
