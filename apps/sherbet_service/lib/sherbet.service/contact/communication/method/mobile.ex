@@ -222,7 +222,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
 
     defp generate_key() do
         0..5
-        |> Enum.map(fn _ -> :crypto.rand_uniform(48, 57) end)
+        |> Enum.map(fn _ -> :rand.uniform(10) + 47 end)
         |> to_string()
     end
 end
