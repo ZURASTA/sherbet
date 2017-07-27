@@ -40,7 +40,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
-    defp make_primary(:already_primary, identity, mobile), do: :ok
+    defp make_primary(:already_primary, _, _), do: :ok
     defp make_primary(transaction, identity, mobile) do
         query = from contact in Mobile.Model,
             where: contact.identity == ^identity and contact.mobile == ^mobile

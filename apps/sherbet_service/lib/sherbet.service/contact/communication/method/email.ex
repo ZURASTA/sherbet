@@ -41,7 +41,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
-    defp make_primary(:already_primary, identity, email), do: :ok
+    defp make_primary(:already_primary, _, _), do: :ok
     defp make_primary(transaction, identity, email) do
         query = from contact in Email.Model,
             where: contact.identity == ^identity and contact.email == ^email
