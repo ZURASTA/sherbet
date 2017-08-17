@@ -4,6 +4,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
     """
 
     @behaviour Sherbet.Service.Contact.Communication.Method
+    @key Application.get_env(:sherbet_service, :mobile_key_length, 8)
 
     alias Sherbet.Service.Contact.Communication.Method.Mobile
     require Logger
@@ -208,8 +209,8 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
-    defp generate_key() do
-        0..5
+    defp generate_key(data \\ @key) do
+        0..data
         |> Enum.map(fn _ -> :crypto.rand_uniform(48, 57) end)
         |> to_string()
     end

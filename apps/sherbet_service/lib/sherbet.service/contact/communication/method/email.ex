@@ -4,6 +4,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
     """
 
     @behaviour Sherbet.Service.Contact.Communication.Method
+    @key Application.get_env(:sherbet_service, :email_key_length, 32)
 
     alias Sherbet.Service.Contact.Communication.Method.Email
     alias Cake.API.Mailer
@@ -217,8 +218,8 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
-    defp generate_key() do
-        :crypto.strong_rand_bytes(32)
+    defp generate_key(data \\ @key) do
+        :crypto.strong_rand_bytes(data)
         |> Base.url_encode64
     end
 end
