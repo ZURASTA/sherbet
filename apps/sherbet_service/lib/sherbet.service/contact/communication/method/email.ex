@@ -229,8 +229,12 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
-    defp generate_key() do
-        :crypto.strong_rand_bytes(32)
-        |> Base.url_encode64
+    @email_key_length Nesty.get(Application.get_env(:sherbet_service, :contact), [:email, :key_length], 32)
+
+    defp generate_key(length \\ @email_key_length) do
+        Nesty.get(Application.get_env(:sherbet_service, :contact), [:email, :key_generator], fn length ->
+            :crypto.strong_rand_bytes(length)
+            |> Base.url_encode64
+        end).(length)
     end
 end

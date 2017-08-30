@@ -220,9 +220,13 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
-    defp generate_key() do
-        0..5
-        |> Enum.map(fn _ -> :rand.uniform(10) + 47 end)
-        |> to_string()
+    @mobile_key_length Nesty.get(Application.get_env(:sherbet_service, :contact), [:mobile, :key_length], 6)
+
+    defp generate_key(length \\ @mobile_key_length) do
+        Nesty.get(Application.get_env(:sherbet_service, :contact), [:mobile, :key_generator], fn length ->
+            1..length
+            |> Enum.map(fn _ -> :rand.uniform(10) + 47 end)
+            |> to_string()
+        end).(length)
     end
 end
