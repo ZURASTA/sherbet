@@ -50,6 +50,7 @@ defmodule Sherbet.Service.Mixfile do
         [
             { :ecto, "~> 2.1" },
             { :postgrex, "~> 0.13.2" },
+            { :nesty, "~> 0.1.0" },
             { :cake_api, github: "ScrimpyCat/cake", sparse: "apps/cake_api" },
             { :cake_email, github: "ScrimpyCat/cake", sparse: "apps/cake_email", override: true },
             { :protecto, github: "ScrimpyCat/Protecto" },
