@@ -5,12 +5,14 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
 
     @behaviour Sherbet.Service.Contact.Communication.Method
 
-    alias Sherbet.Service.Contact.Communication.Method.Mobile
+    alias Sherbet.Service.Contact.Communication
+    alias Communication.Method.Mobile
     require Logger
     import Ecto.Query
 
     #todo: should error reasons expose changeset.errors?
 
+    @impl Communication.Method
     def add(identity, mobile) do
         contact =
             %Mobile.Model{}
@@ -25,6 +27,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
+    @impl Communication.Method
     def remove(identity, mobile) do
         query = from contact in Mobile.Model,
             where: contact.identity == ^identity and contact.mobile == ^mobile
@@ -37,7 +40,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
-    defp make_primary(:already_primary, identity, mobile), do: :ok
+    defp make_primary(:already_primary, _, _), do: :ok
     defp make_primary(transaction, identity, mobile) do
         query = from contact in Mobile.Model,
             where: contact.identity == ^identity and contact.mobile == ^mobile
@@ -51,6 +54,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
+    @impl Communication.Method
     def set_priority(identity, mobile, :primary) do
         query = from contact in Mobile.Model,
             where: contact.identity == ^identity and contact.primary == true
@@ -77,6 +81,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
+    @impl Communication.Method
     def verified?(identity, mobile) do
         query = from contact in Mobile.Model,
             where: contact.identity == ^identity and contact.mobile == ^mobile,
@@ -88,6 +93,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
+    @impl Communication.Method
     def contacts(identity) do
         query = from contact in Mobile.Model,
             where: contact.identity == ^identity,
@@ -105,6 +111,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         }
     end
 
+    @impl Communication.Method
     def primary_contact(identity) do
         query = from contact in Mobile.Model,
             where: contact.identity == ^identity and contact.primary == true,
@@ -117,6 +124,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
+    @impl Communication.Method
     def owner(mobile) do
         query = from contact in Mobile.Model,
             where: contact.mobile == ^mobile,
@@ -128,6 +136,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
+    @impl Communication.Method
     def request_removal(mobile) do
         query = from contact in Mobile.Model,
             where: contact.mobile == ^mobile,
@@ -146,6 +155,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
+    @impl Communication.Method
     def finalise_removal(mobile, key) do
         query = from removal in Mobile.RemovalKey.Model,
             where: removal.key == ^key,
@@ -165,6 +175,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
+    @impl Communication.Method
     def request_verification(identity, mobile) do
         query = from contact in Mobile.Model,
             where: contact.mobile == ^mobile and contact.identity == ^identity,
@@ -183,6 +194,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
+    @impl Communication.Method
     def finalise_verification(identity, mobile, key) do
         query = from verification in Mobile.VerificationKey.Model,
             where: verification.key == ^key,
@@ -208,12 +220,12 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile do
         end
     end
 
-    @mobile_key_length Nesty.get(Application.get_env(:sherbet_service, :contact), [:mobile, :key_length], 5)
+    @mobile_key_length Nesty.get(Application.get_env(:sherbet_service, :contact), [:mobile, :key_length], 6)
 
     defp generate_key(length \\ @mobile_key_length) do
         Nesty.get(Application.get_env(:sherbet_service, :contact), [:mobile, :key_generator], fn length ->
-            0..length
-            |> Enum.map(fn _ -> :crypto.rand_uniform(48, 57) end)
+            1..length
+            |> Enum.map(fn _ -> :rand.uniform(10) + 47 end)
             |> to_string()
         end).(length)
     end

@@ -5,13 +5,15 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
 
     @behaviour Sherbet.Service.Contact.Communication.Method
 
-    alias Sherbet.Service.Contact.Communication.Method.Email
+    alias Sherbet.Service.Contact.Communication
+    alias Communication.Method.Email
     alias Cake.API.Mailer
     require Logger
     import Ecto.Query
 
     #todo: should error reasons expose changeset.errors?
 
+    @impl Communication.Method
     def add(identity, email) do
         contact =
             %Email.Model{}
@@ -26,6 +28,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
+    @impl Communication.Method
     def remove(identity, email) do
         query = from contact in Email.Model,
             where: contact.identity == ^identity and contact.email == ^email
@@ -38,7 +41,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
-    defp make_primary(:already_primary, identity, email), do: :ok
+    defp make_primary(:already_primary, _, _), do: :ok
     defp make_primary(transaction, identity, email) do
         query = from contact in Email.Model,
             where: contact.identity == ^identity and contact.email == ^email
@@ -52,6 +55,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
+    @impl Communication.Method
     def set_priority(identity, email, :primary) do
         query = from contact in Email.Model,
             where: contact.identity == ^identity and contact.primary == true
@@ -78,6 +82,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
+    @impl Communication.Method
     def verified?(identity, email) do
         query = from contact in Email.Model,
             where: contact.identity == ^identity and contact.email == ^email,
@@ -89,6 +94,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
+    @impl Communication.Method
     def contacts(identity) do
         query = from contact in Email.Model,
             where: contact.identity == ^identity,
@@ -106,6 +112,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         }
     end
 
+    @impl Communication.Method
     def primary_contact(identity) do
         query = from contact in Email.Model,
             where: contact.identity == ^identity and contact.primary == true,
@@ -118,6 +125,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
+    @impl Communication.Method
     def owner(email) do
         query = from contact in Email.Model,
             where: contact.email == ^email,
@@ -129,6 +137,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
+    @impl Communication.Method
     def request_removal(email) do
         query = from contact in Email.Model,
             where: contact.email == ^email,
@@ -151,6 +160,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
+    @impl Communication.Method
     def finalise_removal(email, key) do
         query = from removal in Email.RemovalKey.Model,
             where: removal.key == ^key,
@@ -170,6 +180,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
+    @impl Communication.Method
     def request_verification(identity, email) do
         query = from contact in Email.Model,
             where: contact.email == ^email and contact.identity == ^identity,
@@ -192,6 +203,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email do
         end
     end
 
+    @impl Communication.Method
     def finalise_verification(identity, email, key) do
         query = from verification in Email.VerificationKey.Model,
             where: verification.key == ^key,

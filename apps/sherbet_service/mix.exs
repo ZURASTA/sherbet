@@ -9,7 +9,7 @@ defmodule Sherbet.Service.Mixfile do
             config_path: "../../config/config.exs",
             deps_path: "../../deps",
             lockfile: "../../mix.lock",
-            elixir: "~> 1.4",
+            elixir: "~> 1.5",
             elixirc_paths: elixirc_paths(Mix.env),
             build_embedded: Mix.env == :prod,
             start_permanent: Mix.env == :prod,
@@ -51,11 +51,11 @@ defmodule Sherbet.Service.Mixfile do
             { :ecto, "~> 2.1" },
             { :postgrex, "~> 0.13.2" },
             { :nesty, "~> 0.1.0" },
-            { :cake_api, github: "ScrimpyCat/cake", sparse: "apps/cake_api" },
-            { :cake_email, github: "ScrimpyCat/cake", sparse: "apps/cake_email", override: true },
+            { :cake_api, github: "ZURASTA/cake", sparse: "apps/cake_api" },
+            { :cake_email, github: "ZURASTA/cake", sparse: "apps/cake_email", override: true },
             { :protecto, github: "ScrimpyCat/Protecto" },
             { :defecto, github: "ScrimpyCat/Defecto", only: :test },
-            { :cake_service, github: "ScrimpyCat/cake", sparse: "apps/cake_service", only: :test }
+            { :cake_service, github: "ZURASTA/cake", sparse: "apps/cake_service", only: :test }
         ]
     end
 
