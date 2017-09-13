@@ -15,16 +15,52 @@ defmodule Sherbet.Service.Contact do
         GenServer.start_link(__MODULE__, [], name: __MODULE__)
     end
 
-    def handle_call({ :add, { type, contact }, identity }, _from, state), do: { :reply, Communication.add(type, contact, identity), state }
-    def handle_call({ :add, { type, contact, priority }, identity }, _from, state), do: { :reply, Communication.add(type, contact, priority, identity), state }
-    def handle_call({ :remove, { type, contact }, identity }, _from, state), do: { :reply, Communication.remove(type, contact, identity), state }
-    def handle_call({ :set_priority, { type, contact, priority }, identity }, _from, state), do: { :reply, Communication.set_priority(type, contact, priority, identity), state }
-    def handle_call({ :request_removal, { type, contact } }, _from, state), do: { :reply, Communication.request_removal(type, contact), state }
-    def handle_call({ :finalise_removal, { type, contact, key } }, _from, state), do: { :reply, Communication.finalise_removal(type, contact, key), state }
-    def handle_call({ :verified?, { type, contact }, identity }, _from, state), do: { :reply, Communication.verified?(type, contact, identity), state }
-    def handle_call({ :request_verification, { type, contact }, identity }, _from, state), do: { :reply, Communication.request_verification(type, contact, identity), state }
-    def handle_call({ :finalise_verification, { type, contact, key }, identity }, _from, state), do: { :reply, Communication.finalise_verification(type, contact, key, identity), state }
-    def handle_call({ :contacts, { type }, identity }, _from, state), do: { :reply, Communication.contacts(type, identity), state }
-    def handle_call({ :primary_contact, { type }, identity }, _from, state), do: { :reply, Communication.primary_contact(type, identity), state }
-    def handle_call({ :owner, { type, contact } }, _from, state), do: { :reply, Communication.owner(type, contact), state }
+    def handle_call({ :add, { type, contact }, identity }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Communication.add(type, contact, identity)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :add, { type, contact, priority }, identity }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Communication.add(type, contact, priority, identity)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :remove, { type, contact }, identity }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Communication.remove(type, contact, identity)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :set_priority, { type, contact, priority }, identity }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Communication.set_priority(type, contact, priority, identity)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :request_removal, { type, contact } }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Communication.request_removal(type, contact)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :finalise_removal, { type, contact, key } }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Communication.finalise_removal(type, contact, key)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :verified?, { type, contact }, identity }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Communication.verified?(type, contact, identity)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :request_verification, { type, contact }, identity }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Communication.request_verification(type, contact, identity)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :finalise_verification, { type, contact, key }, identity }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Communication.finalise_verification(type, contact, key, identity)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :contacts, { type }, identity }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Communication.contacts(type, identity)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :primary_contact, { type }, identity }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Communication.primary_contact(type, identity)) end)
+        { :noreply, state }
+    end
+    def handle_call({ :owner, { type, contact } }, from, state) do
+        Task.start(fn -> GenServer.reply(from, Communication.owner(type, contact)) end)
+        { :noreply, state }
+    end
 end
