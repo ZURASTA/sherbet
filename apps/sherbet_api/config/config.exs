@@ -30,5 +30,5 @@ use Mix.Config
 #     import_config "#{Mix.env}.exs"
 
 if Mix.env == :test do
-    import_config "../../sherbet_service/config/config.exs" 
+    import_config "../../sherbet_service/config/config.exs"
 end

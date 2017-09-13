@@ -12,4 +12,4 @@ config :sherbet_service, Sherbet.Service.Repo,
     hostname: "localhost",
     pool: Ecto.Adapters.SQL.Sandbox
 
-import_config "../../../deps/cake_service/apps/cake_service/config/config.exs"
+import_config Path.join(Mix.Project.deps_path(), "cake_service/apps/cake_service/config/config.exs")
