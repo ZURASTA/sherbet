@@ -9,7 +9,7 @@ defmodule Sherbet.Mixfile do
             deps: deps(),
             dialyzer: [plt_add_deps: :transitive],
             name: "Sherbet",
-            source_url: "https://github.com/ScrimpyCat/sherbet",
+            source_url: "https://github.com/ZURASTA/sherbet",
             docs: [
                 main: "sherbet",
                 extras: ["README.md": [filename: "sherbet", title: "Sherbet"]]
