@@ -66,7 +66,7 @@ By default the service runs in `:auto` mode. To change this behaviour, pass in t
 
 #### Database
 
-The database options can be configured by providing the config for the key `Sherbet.Service.Repo`. If no configuration is provided, a default configuration is used for `:test` and `:dev` builds. This default Ecto repo uses a locally hosted (accessible through localhost) PostgreSQL database, with the user/name as `postgres` and `postgres`.
+The database options can be configured by providing the config for the key `Sherbet.Service.Repo`.
 
 For details on how to configure an [Ecto repo](https://hexdocs.pm/ecto/Ecto.Repo.html).
 
