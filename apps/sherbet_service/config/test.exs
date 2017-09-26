@@ -12,4 +12,7 @@ config :sherbet_service, Sherbet.Service.Repo,
     hostname: "localhost",
     pool: Ecto.Adapters.SQL.Sandbox
 
-import_config Path.join(Mix.Project.deps_path(), "cake_service/apps/cake_service/config/config.exs")
+config :cake_service, Cake.Service.Mailer.Dispatch,
+    adapter: Swoosh.Adapters.Logger,
+    log_full_email: true,
+    level: :debug
