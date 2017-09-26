@@ -44,7 +44,7 @@ Support for contacts can be added by implementing the behaviours in `Sherbet.Ser
 
 Support for email based contacts is provided by the `Sherbet.Service.Contact.Communication.Method.Email` implementation.
 
-Email verification/removal requests are delivered using the `Cake` service. The templates for those emails can be customised in the config file, more information on how to customise them can be found in `Sherbet.Service.Contact.Communication.Method.Email.VerificationKey.Template` and `Sherbet.Service.Contact.Communication.Method.Email.RemovalKey.Template`.
+Email verification/removal requests are delivered using the [`Cake`](https://github.com/ZURASTA/cake) service. The templates for those emails can be customised in the config file, more information on how to customise them can be found in `Sherbet.Service.Contact.Communication.Method.Email.VerificationKey.Template` and `Sherbet.Service.Contact.Communication.Method.Email.RemovalKey.Template`.
 
 
 ### Mobile
@@ -70,5 +70,3 @@ By default the service runs in `:auto` mode. To change this behaviour, pass in t
 The database options can be configured by providing the config for the key `Sherbet.Service.Repo`.
 
 For details on how to configure an [Ecto repo](https://hexdocs.pm/ecto/Ecto.Repo.html).
-
-__Note:__ If a PostgreSQL database is used, the service will create a custom type. For details on how to interact with this type, see the [EctoEnum docs](http://hexdocs.pm/ecto_enum).
