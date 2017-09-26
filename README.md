@@ -54,17 +54,18 @@ Support for mobile based contacts is provided by the `Sherbet.Service.Contact.Co
 Mobile verification/removal requests are delivered by __todo: sms service__.
 
 
-### Configuration
+Configuration
+-------------
 
 The service may be configured with the following options:
 
-#### Setup Mode
+### Setup Mode
 
 The service has two setup modes: `:auto` and `:manual`. When the service is started in `:auto`, it will automatically handle creating and migrating the database. When the service is started in `:manual`, the state of the database is left up to the user to manually setup.
 
 By default the service runs in `:auto` mode. To change this behaviour, pass in the `{ :setup_mode, mode }` when starting the application.
 
-#### Database
+### Database
 
 The database options can be configured by providing the config for the key `Sherbet.Service.Repo`.
 
