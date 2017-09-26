@@ -1,4 +1,4 @@
-[![Stories in Ready](https://badge.waffle.io/ZURASTA/sherbet.png?label=ready&title=Ready)](https://waffle.io/ZURASTA/sherbet?utm_source=badge)
+[![Stories in Ready](https://badge.waffle.io/ZURASTA/sherbet.png?label=ready&title=Ready)](https://waffle.io/ZURASTA/sherbet?utm_source=badge) [![CircleCI](https://circleci.com/gh/ZURASTA/sherbet.svg?style=svg)](https://circleci.com/gh/ZURASTA/sherbet)
 # Sherbet (Contact Management)
 
 Manages the contacts belonging to different identities. A contact may be any kind of communication method between the service and the identity, where that identity is the owner of that communication method.
@@ -31,7 +31,7 @@ Due to the fact that an identity could associate with a contact that they don't 
 
 For any functions that require an identity ID, the best practice is to treat those operations as insecure. And so the identity should be correctly authenticated before performing the operation (e.g. an active login session/trusted party). Functions that do not require an identity ID can be treated as secure, however access to them should be kept within reason (determine it on a per function basis; e.g. `request_removal/1` should be accessible to anyone, while `owner/1` should probably be kept private/accessed by only trusted parties).
 
-The next thing is to keep in mind that unverified contacts may not be owned by the identity and therefore care must be taken when communicating with then. Ideally only verification or reclamation requests should be sent to it, while any sensitive information should not.
+The next thing is to keep in mind that unverified contacts may not be owned by the identity and therefore care must be taken when communicating with them. Ideally only verification or reclamation requests should be sent to it, while any sensitive information should not.
 
 
 Contacts
