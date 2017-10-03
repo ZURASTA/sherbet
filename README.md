@@ -1,5 +1,7 @@
-[![Stories in Ready](https://badge.waffle.io/ZURASTA/sherbet.png?label=ready&title=Ready)](https://waffle.io/ZURASTA/sherbet?utm_source=badge) [![CircleCI](https://circleci.com/gh/ZURASTA/sherbet.svg?style=svg)](https://circleci.com/gh/ZURASTA/sherbet)
 # Sherbet (Contact Management)
+
+[![Stories in Ready](https://badge.waffle.io/ZURASTA/sherbet.png?label=ready&title=Ready)](https://waffle.io/ZURASTA/sherbet?utm_source=badge)
+[![CircleCI](https://circleci.com/gh/ZURASTA/sherbet.svg?style=svg)](https://circleci.com/gh/ZURASTA/sherbet)
 
 Manages the contacts belonging to different identities. A contact may be any kind of communication method between the service and the identity, where that identity is the owner of that communication method.
 
