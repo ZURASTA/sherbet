@@ -13,7 +13,10 @@ defmodule Sherbet.Mixfile do
             source_url: "https://github.com/ZURASTA/sherbet",
             docs: [
                 main: "sherbet",
-                extras: ["README.md": [filename: "sherbet", title: "Sherbet"]]
+                extras: [
+                    "README.md": [filename: "sherbet", title: "Sherbet"],
+                    "overview.md": [filename: "overview", title: "Overview"]
+                ]
             ]
         ]
     end
