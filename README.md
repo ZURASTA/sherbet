@@ -61,6 +61,40 @@ Configuration
 
 The service may be configured with the following options:
 
+### Server
+
+The service can be made available through various methods customisable using the `:server` key in the service and API configs. The `:server:` key expects the value to be a function that accepts a module and returns a value acceptable by the `server` argument of GenServer requests, or name field of GenServer registration. Some examples of this can be:
+
+#### Local Named Server
+
+```elixir
+config :sherbet_service,
+    server: &(&1)
+
+config :sherbet_api,
+    server: &(&1)
+```
+
+#### Distributed Named Server
+
+```elixir
+config :sherbet_service,
+    server: &(&1)
+
+config :sherbet_api,
+    server: &({ &1, :"foo@127.0.0.1" })
+```
+
+#### Swarm Registered Server
+
+```elixir
+config :sherbet_service,
+    server: &({ :via, :swarm, &1 })
+
+config :sherbet_api,
+    server: &({ :via, :swarm, &1 })
+```
+
 ### Setup Mode
 
 The service has two setup modes: `:auto` and `:manual`. When the service is started in `:auto`, it will automatically handle creating and migrating the database. When the service is started in `:manual`, the state of the database is left up to the user to manually setup.

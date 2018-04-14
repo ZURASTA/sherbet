@@ -12,7 +12,7 @@ defmodule Sherbet.Service.Contact do
     end
 
     def start_link() do
-        GenServer.start_link(__MODULE__, [], name: __MODULE__)
+        GenServer.start_link(__MODULE__, [], name: Application.get_env(:sherbet_service, :server, &(&1)).(__MODULE__))
     end
 
     def handle_call({ :add, { type, contact }, identity }, from, state) do
