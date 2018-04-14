@@ -81,7 +81,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email.ModelTest do
     end
 
     test "uniqueness" do
-        email = Sherbet.Service.Repo.insert!(@valid_model)
+        _email = Sherbet.Service.Repo.insert!(@valid_model)
 
         assert_change(@valid_model, %{ identity: Ecto.UUID.generate(), email: @valid_model.email }, :insert_changeset)
         |> assert_insert(:error)
@@ -95,7 +95,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Email.ModelTest do
     end
 
     test "primary uniqueness" do
-        email = Sherbet.Service.Repo.insert!(Email.Model.insert_changeset(@valid_model, %{ primary: true }))
+        _email = Sherbet.Service.Repo.insert!(Email.Model.insert_changeset(@valid_model, %{ primary: true }))
 
         assert_change(@valid_model, %{ identity:  @valid_model.identity, email: "foo@bar", primary: true }, :insert_changeset)
         |> assert_insert(:error)

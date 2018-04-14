@@ -87,7 +87,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile.ModelTest do
     end
 
     test "uniqueness" do
-        mobile = Sherbet.Service.Repo.insert!(@valid_model)
+        _mobile = Sherbet.Service.Repo.insert!(@valid_model)
 
         assert_change(@valid_model, %{ identity: Ecto.UUID.generate(), mobile: @valid_model.mobile }, :insert_changeset)
         |> assert_insert(:error)
@@ -101,7 +101,7 @@ defmodule Sherbet.Service.Contact.Communication.Method.Mobile.ModelTest do
     end
 
     test "primary uniqueness" do
-        mobile = Sherbet.Service.Repo.insert!(Mobile.Model.insert_changeset(@valid_model, %{ primary: true }))
+        _mobile = Sherbet.Service.Repo.insert!(Mobile.Model.insert_changeset(@valid_model, %{ primary: true }))
 
         assert_change(@valid_model, %{ identity:  @valid_model.identity, mobile: "+100", primary: true }, :insert_changeset)
         |> assert_insert(:error)
