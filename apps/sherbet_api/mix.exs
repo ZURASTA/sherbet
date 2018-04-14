@@ -13,7 +13,7 @@ defmodule Sherbet.API.Mixfile do
             elixirc_paths: elixirc_paths(Mix.env),
             build_embedded: Mix.env == :prod,
             start_permanent: Mix.env == :prod,
-            deps: deps(Mix.Project.umbrella?),
+            deps: deps(),
             dialyzer: [plt_add_deps: :transitive]
         ]
     end
@@ -42,11 +42,10 @@ defmodule Sherbet.API.Mixfile do
     #   {:my_app, in_umbrella: true}
     #
     # Type "mix help deps" for more examples and options
-    defp deps(false) do
+    defp deps() do
         [
-            { :sherbet_service, path: "../sherbet_service", only: :test },
+            { :sherbet_service, in_umbrella: true, only: :test },
             { :defecto, github: "ScrimpyCat/Defecto", only: :test }
         ]
     end
-    defp deps(true), do: []
 end
