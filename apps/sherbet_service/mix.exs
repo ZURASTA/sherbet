@@ -52,7 +52,7 @@ defmodule Sherbet.Service.Mixfile do
             { :postgrex, "~> 0.13.2" },
             { :nesty, "~> 0.1.0" },
             { :cake_api, github: "ZURASTA/cake", sparse: "apps/cake_api" },
-            { :cake_email, github: "ZURASTA/cake", sparse: "apps/cake_email", override: true },
+            { :cake_email, github: "ZURASTA/cake", sparse: "apps/cake_email" },
             { :protecto, github: "ScrimpyCat/Protecto" },
             { :defecto, github: "ScrimpyCat/Defecto", only: :test },
             { :cake_service, github: "ZURASTA/cake", sparse: "apps/cake_service", only: :test }
